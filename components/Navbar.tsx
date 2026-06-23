@@ -20,7 +20,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3">
-            <Image src="/logo.svg" alt="PJ Logo" width={40} height={40} className="rounded-full" />
+            <Image src="/logo.png" alt="PJ Logo" width={40} height={40} className="rounded-full bg-white p-0.5" />
             <span className="font-bold text-lg hidden sm:block">Philip Jaisohn Foundation</span>
           </Link>
 
