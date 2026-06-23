@@ -44,6 +44,11 @@ export async function initDb() {
   // Add columns if they don't exist (for existing tables)
   await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS requirements TEXT`;
   await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS deadline TEXT`;
+  await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS required_fields TEXT DEFAULT '["name","email","school","year","birthday"]'`;
+  await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS required_docs TEXT DEFAULT '["resume","transcript"]'`;
+  await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS essay1_prompt TEXT DEFAULT 'Tell us about yourself and why you are interested in this opportunity.'`;
+  await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS essay2_prompt TEXT DEFAULT 'Describe a time you demonstrated leadership or made an impact in your community.'`;
+  await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS essay3_prompt TEXT DEFAULT 'What are your future goals and how will this opportunity help you achieve them?'`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS applications (
@@ -56,6 +61,13 @@ export async function initDb() {
       essay3 TEXT,
       resume_path TEXT,
       transcript_path TEXT,
+      cover_letter_path TEXT,
+      rec_letter_path TEXT,
+      financial_need_path TEXT,
+      supporting_docs_path TEXT,
+      applicant_school TEXT,
+      applicant_year TEXT,
+      applicant_birthday TEXT,
       score INTEGER,
       review_notes TEXT,
       essay1_score INTEGER,
@@ -68,6 +80,13 @@ export async function initDb() {
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS cover_letter_path TEXT`;
+  await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS rec_letter_path TEXT`;
+  await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS financial_need_path TEXT`;
+  await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS supporting_docs_path TEXT`;
+  await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS applicant_school TEXT`;
+  await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS applicant_year TEXT`;
+  await sql`ALTER TABLE applications ADD COLUMN IF NOT EXISTS applicant_birthday TEXT`;
   await sql`
     CREATE TABLE IF NOT EXISTS alumni (
       id TEXT PRIMARY KEY,

@@ -11,7 +11,11 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   await ensureDb();
   const user = session.user as any;
   const result = await sql`
-    SELECT a.*, u.name as user_name, u.email as user_email, o.name as opportunity_name, o.type as opportunity_type
+    SELECT a.*,
+      u.name as user_name, u.email as user_email,
+      o.name as opportunity_name, o.type as opportunity_type,
+      o.required_fields, o.required_docs,
+      o.essay1_prompt, o.essay2_prompt, o.essay3_prompt
     FROM applications a
     JOIN users u ON a.user_id = u.id
     JOIN opportunities o ON a.opportunity_id = o.id
@@ -22,6 +26,9 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   if (user.role !== "reviewer" && app.user_id !== user.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
+  // Parse JSON fields
+  try { app.required_fields = JSON.parse(app.required_fields || '["name","email","school","year","birthday"]'); } catch { app.required_fields = ["name","email","school","year","birthday"]; }
+  try { app.required_docs = JSON.parse(app.required_docs || '["resume","transcript"]'); } catch { app.required_docs = ["resume","transcript"]; }
   return NextResponse.json(app);
 }
 
@@ -58,13 +65,16 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   if (app.user_id !== user.id) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
-  const { essay1, essay2, essay3, submit } = body;
+  const { essay1, essay2, essay3, applicant_school, applicant_year, applicant_birthday, submit } = body;
   if (submit) {
     await sql`
       UPDATE applications SET
         essay1 = COALESCE(${essay1 ?? null}, essay1),
         essay2 = COALESCE(${essay2 ?? null}, essay2),
         essay3 = COALESCE(${essay3 ?? null}, essay3),
+        applicant_school = COALESCE(${applicant_school ?? null}, applicant_school),
+        applicant_year = COALESCE(${applicant_year ?? null}, applicant_year),
+        applicant_birthday = COALESCE(${applicant_birthday ?? null}, applicant_birthday),
         status = 'submitted',
         submitted_at = NOW(),
         updated_at = NOW()
@@ -76,6 +86,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         essay1 = COALESCE(${essay1 ?? null}, essay1),
         essay2 = COALESCE(${essay2 ?? null}, essay2),
         essay3 = COALESCE(${essay3 ?? null}, essay3),
+        applicant_school = COALESCE(${applicant_school ?? null}, applicant_school),
+        applicant_year = COALESCE(${applicant_year ?? null}, applicant_year),
+        applicant_birthday = COALESCE(${applicant_birthday ?? null}, applicant_birthday),
         updated_at = NOW()
       WHERE id = ${id}
     `;
