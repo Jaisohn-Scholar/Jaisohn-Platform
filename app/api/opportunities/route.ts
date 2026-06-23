@@ -6,7 +6,14 @@ import { randomUUID } from "crypto";
 
 export async function GET() {
   await ensureDb();
-  const result = await sql`SELECT * FROM opportunities ORDER BY type, name`;
+  const result = await sql`
+    SELECT o.*,
+      COUNT(a.id) FILTER (WHERE a.status = 'accepted') AS accepted_count
+    FROM opportunities o
+    LEFT JOIN applications a ON a.opportunity_id = o.id
+    GROUP BY o.id
+    ORDER BY o.type, o.name
+  `;
   return NextResponse.json(result.rows);
 }
 

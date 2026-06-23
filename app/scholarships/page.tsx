@@ -13,6 +13,7 @@ interface Opportunity {
   slots: number;
   requirements: string | null;
   deadline: string | null;
+  accepted_count: number;
 }
 
 export default function ScholarshipsPage() {
@@ -33,6 +34,14 @@ export default function ScholarshipsPage() {
     tab === "scholarship" ? scholarships : internships;
 
   const getApplyButton = (opp: Opportunity) => {
+    const isFilled = opp.accepted_count >= opp.slots;
+    if (isFilled) {
+      return (
+        <div className="block w-full text-center bg-gray-100 text-gray-400 font-semibold px-6 py-2.5 rounded-md mt-auto cursor-default select-none">
+          All Spots Filled
+        </div>
+      );
+    }
     if (!session) {
       return (
         <Link
@@ -104,7 +113,7 @@ export default function ScholarshipsPage() {
       <section className="py-14 px-8 sm:px-12 lg:px-20 flex-1 bg-[#f8f9fc]">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((opp) => (
-            <div key={opp.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-md transition-shadow">
+            <div key={opp.id} className={`bg-white rounded-2xl shadow-sm border p-6 flex flex-col hover:shadow-md transition-shadow ${opp.accepted_count >= opp.slots ? "border-gray-200 opacity-75" : "border-gray-100"}`}>
               <div className="flex items-center justify-between mb-4">
                 <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
                   opp.type === "internship"
@@ -113,9 +122,16 @@ export default function ScholarshipsPage() {
                 }`}>
                   {opp.type === "internship" ? "💼 Internship" : "🎓 Scholarship"}
                 </span>
-                {opp.award && (
-                  <span className="text-green-700 font-bold text-sm bg-green-50 px-3 py-1 rounded-full border border-green-200">{opp.award}</span>
-                )}
+                <div className="flex items-center gap-2">
+                  {opp.accepted_count >= opp.slots && (
+                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
+                      Filled
+                    </span>
+                  )}
+                  {opp.award && (
+                    <span className="text-green-700 font-bold text-sm bg-green-50 px-3 py-1 rounded-full border border-green-200">{opp.award}</span>
+                  )}
+                </div>
               </div>
               <h3 className="text-lg font-bold text-[#101661] mb-2 leading-snug">{opp.name}</h3>
               <p className="text-gray-500 text-sm mb-4 leading-relaxed flex-1">{opp.description}</p>
@@ -129,9 +145,7 @@ export default function ScholarshipsPage() {
                 {opp.deadline && (
                   <span className="text-[#b51f1f] font-semibold">📅 {opp.deadline}</span>
                 )}
-                {opp.slots > 1 && (
-                  <span>👥 {opp.slots} recipients</span>
-                )}
+                <span>👥 {opp.accepted_count}/{opp.slots} spot{opp.slots !== 1 ? "s" : ""} filled</span>
               </div>
               {getApplyButton(opp)}
             </div>

@@ -14,6 +14,7 @@ interface Opportunity {
   slots: number;
   requirements: string | null;
   deadline: string | null;
+  accepted_count: number;
 }
 
 const EMPTY_FORM = {
@@ -275,9 +276,12 @@ function OppRow({ opp, onEdit, onDelete }: { opp: Opportunity; onEdit: (o: Oppor
           {opp.award && <span className="text-green-700 text-sm font-medium">{opp.award}</span>}
         </div>
         <p className="text-gray-500 text-sm mb-1 line-clamp-2">{opp.description}</p>
-        <div className="flex flex-wrap gap-3 text-xs text-gray-400">
+        <div className="flex flex-wrap gap-3 text-xs text-gray-400 items-center">
           {opp.deadline && <span>Deadline: {opp.deadline}</span>}
-          <span>{opp.slots} slot{opp.slots !== 1 ? "s" : ""}</span>
+          <span>{opp.accepted_count}/{opp.slots} spot{opp.slots !== 1 ? "s" : ""} filled</span>
+          {opp.accepted_count >= opp.slots && (
+            <span className="bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full font-medium">All Filled</span>
+          )}
         </div>
       </div>
       <div className="flex gap-2 shrink-0">
