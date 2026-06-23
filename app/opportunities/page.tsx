@@ -123,11 +123,6 @@ export default function OpportunitiesPage() {
                   {opp.type === "internship" ? "💼 Internship" : "🎓 Scholarship"}
                 </span>
                 <div className="flex items-center gap-2">
-                  {opp.accepted_count >= opp.slots && (
-                    <span className="text-xs font-semibold px-3 py-1 rounded-full bg-gray-100 text-gray-500 border border-gray-200">
-                      Filled
-                    </span>
-                  )}
                   {opp.award && (
                     <span className="text-green-700 font-bold text-sm bg-green-50 px-3 py-1 rounded-full border border-green-200">{opp.award}</span>
                   )}
