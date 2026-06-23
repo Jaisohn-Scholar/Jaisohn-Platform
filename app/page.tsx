@@ -57,7 +57,7 @@ export default function Home() {
               <Image src="/logo.png" alt="PJ" width={20} height={20} className="rounded-full bg-white/90 p-0.5" />
               Philip Jaisohn Memorial Foundation · Est. 1975
             </div>
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-6 tracking-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-[1.1] mb-6 tracking-tight">
               Apply for<br />Scholarships<br />and Internships
             </h1>
             <p className="text-blue-200 text-lg mb-10 max-w-lg leading-relaxed">
@@ -78,13 +78,13 @@ export default function Home() {
               </Link>
             </div>
           </div>
-          <div className="flex justify-center md:justify-end">
-            <div className="bg-white rounded-2xl p-10 shadow-2xl ml-8">
+          <div className="flex justify-center items-center">
+            <div className="bg-white rounded-2xl p-10 shadow-2xl">
               <Image
                 src="/logo.png"
                 alt="Philip Jaisohn Foundation"
-                width={280}
-                height={240}
+                width={260}
+                height={220}
                 priority
               />
             </div>
@@ -113,12 +113,13 @@ export default function Home() {
       <section className="py-24 px-8 sm:px-12 lg:px-20 bg-[#f8f9fc]">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div className="rounded-2xl overflow-hidden shadow-lg aspect-video relative">
-            <img
-              src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80&fit=crop"
+            <Image
+              src="/graduation.jpg"
               alt="Students at graduation ceremony"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#101661]/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#101661]/20 to-transparent" />
           </div>
           <div>
             <p className="text-[#b51f1f] font-semibold text-sm uppercase tracking-widest mb-3">About Us</p>
@@ -160,14 +161,14 @@ export default function Home() {
               The Foundation bearing his name continues his work — bridging cultures, empowering communities, and investing in the leaders of tomorrow.
             </p>
           </div>
-          <div className="bg-white/10 backdrop-blur rounded-2xl p-10 border border-white/20">
-            <div className="text-5xl text-blue-200 mb-6 font-serif">"</div>
-            <p className="text-white text-2xl font-semibold leading-relaxed mb-6">
+          <div className="bg-white rounded-2xl p-10 shadow-xl">
+            <div className="text-6xl text-[#b51f1f] leading-none mb-4" style={{fontFamily:"Georgia,serif"}}>"</div>
+            <p className="text-[#101661] text-2xl font-bold leading-relaxed mb-8">
               The future of Korea depends upon the education and enlightenment of its people.
             </p>
-            <div className="flex items-center gap-3 pt-6 border-t border-white/20">
-              <div className="w-1 h-10 bg-[#b51f1f] rounded-full" />
-              <p className="text-blue-200 font-medium">Dr. Philip Jaisohn</p>
+            <div className="flex items-center gap-3 pt-6 border-t border-gray-100">
+              <div className="w-1 h-8 bg-[#b51f1f] rounded-full" />
+              <p className="text-gray-500 font-medium">Dr. Philip Jaisohn</p>
             </div>
           </div>
         </div>
