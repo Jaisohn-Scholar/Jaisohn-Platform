@@ -18,96 +18,139 @@ export default function Home() {
       <Navbar />
 
       {/* Hero */}
-      <section className="bg-[#101661] text-white py-24 px-6 text-center">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center shadow-lg">
-              <span className="text-[#101661] font-bold text-2xl">PJ</span>
+      <section className="bg-[#101661] text-white py-20 px-6">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="inline-flex items-center border border-white/30 rounded-full px-4 py-1 text-sm text-white/80 mb-6">
+              Philip Jaisohn Memorial Foundation
+            </div>
+            <h1 className="text-5xl sm:text-7xl font-bold text-white leading-tight mb-6">
+              Apply for<br />Scholarships and<br />Internships
+            </h1>
+            <p className="text-blue-200 text-lg mb-8 max-w-lg">
+              Empowering the next generation of Asian-American leaders through education, opportunity, and community since 1975.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/scholarships"
+                className="border border-white/60 hover:bg-white/10 text-white font-semibold px-8 py-3 rounded-md text-lg transition-colors"
+              >
+                View Opportunities
+              </Link>
+              <Link
+                href="/login"
+                className="border border-white/60 hover:bg-white/10 text-white font-semibold px-8 py-3 rounded-md text-lg transition-colors"
+              >
+                Create Account
+              </Link>
             </div>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4 leading-tight">
-            Philip Jaisohn Foundation<br />Scholarship Platform
-          </h1>
-          <p className="text-lg text-blue-200 mb-8 max-w-2xl mx-auto">
-            Supporting the next generation of Asian American leaders through scholarships and internships.
-            Apply easily, track your progress, and take the next step in your journey.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href={applyHref}
-              className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-md text-lg transition-colors shadow-lg"
-            >
-              Apply Now
-            </Link>
-            <Link
-              href="/scholarships"
-              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3 rounded-md text-lg transition-colors border border-white/30"
-            >
-              View Opportunities
-            </Link>
-            <a
-              href="https://jaisohn.org/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-3 rounded-md text-lg transition-colors border border-white/30"
-            >
-              About Us
-            </a>
+          <div className="flex justify-center md:justify-end">
+            <div className="w-64 h-64 bg-white/10 rounded-full flex flex-col items-center justify-center border border-white/20">
+              <span className="text-white font-bold text-6xl">PJ</span>
+              <span className="text-white/70 text-lg mt-2">1975</span>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Stats bar */}
+      <section className="bg-[#f3f4f6] py-10 px-6">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
+          {[
+            { value: "30+", label: "Years of Service" },
+            { value: "$500K+", label: "Awarded Annually" },
+            { value: "500+", label: "Alumni Scholars" },
+            { value: "2", label: "Programs Available" },
+          ].map((stat) => (
+            <div key={stat.label}>
+              <p className="text-4xl font-bold text-[#101661]">{stat.value}</p>
+              <p className="text-gray-500 text-sm mt-1">{stat.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* About section */}
       <section className="py-20 px-6 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-[#101661] text-center mb-4">About the Foundation</h2>
-          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            The Philip Jaisohn Memorial Foundation has become the premier health and human services organization
-            of the Asian American community. Founded in 1975, we are a 501(c)(3) non-profit organization.
-          </p>
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { icon: "🎓", title: "Education", desc: "Supporting academic excellence for Asian American students pursuing higher education and professional careers." },
-              { icon: "🤝", title: "Community", desc: "Strengthening and expanding health and human services for the Korean American community since 1975." },
-              { icon: "🌟", title: "Leadership", desc: "Cultivating the next generation of leaders to carry on Dr. Philip Jaisohn's legacy of service and excellence." },
-            ].map((item) => (
-              <div key={item.title} className="text-center p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold text-[#101661] mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm">{item.desc}</p>
-              </div>
-            ))}
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div className="rounded-xl bg-gray-200 aspect-video flex items-center justify-center text-6xl">
+            🎓
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold text-[#101661] mb-6">About the Philip Jaisohn Memorial Foundation</h2>
+            <p className="text-gray-600 mb-4 leading-relaxed">
+              The Philip Jaisohn Memorial Foundation is a non-profit organization established in 1975 in memory of Dr. Philip Jaisohn (Seo Jae-pil), a visionary Korean-American pioneer, physician, and the first Korean naturalized citizen of the United States.
+            </p>
+            <p className="text-gray-600 mb-4 leading-relaxed">
+              Located in Philadelphia, Pennsylvania, the Foundation serves the Korean-American community across the Greater Philadelphia region through health services, cultural programs, senior care, and educational scholarships. Our mission is to foster integration, self-sufficiency, and civic participation among Korean Americans and the broader Asian-American community.
+            </p>
+            <p className="text-gray-600 mb-6 leading-relaxed">
+              Each year, the Foundation awards scholarships and internship opportunities to outstanding students who demonstrate academic excellence, community involvement, and a commitment to carrying forward Dr. Jaisohn's legacy of service and leadership.
+            </p>
+            <a
+              href="https://jaisohn.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#b51f1f] font-semibold hover:underline"
+            >
+              Learn more at jaisohn.org →
+            </a>
           </div>
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="py-20 px-6 bg-gray-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-[#101661] mb-4">How It Works</h2>
-          <p className="text-gray-600 mb-12">Our streamlined platform makes applying simple and transparent.</p>
-          <div className="grid sm:grid-cols-4 gap-6">
+      {/* Legacy section */}
+      <section className="bg-[#101661] py-20 px-6">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 className="text-4xl font-bold text-white mb-6">The Legacy of Dr. Philip Jaisohn</h2>
+            <p className="text-blue-100 mb-4 leading-relaxed">
+              Dr. Philip Jaisohn (1864–1951) was a groundbreaking figure in both Korean and American history. He fled Korea after leading the failed Gapsin Coup, came to America, earned a medical degree from George Washington University, and became the first Korean to be naturalized as a United States citizen in 1890.
+            </p>
+            <p className="text-blue-100 mb-4 leading-relaxed">
+              A physician, publisher, and reformer, Dr. Jaisohn devoted his life to justice, democracy, and the advancement of the Korean people. He founded The Independent, Korea's first modern newspaper published in both Korean and English, advocating for independence and modernization.
+            </p>
+            <p className="text-blue-100 leading-relaxed">
+              The Foundation bearing his name continues his work — bridging cultures, empowering communities, and investing in the leaders of tomorrow.
+            </p>
+          </div>
+          <div className="bg-indigo-900 rounded-xl p-8">
+            <div className="text-3xl mb-4">⭐</div>
+            <p className="text-white text-xl italic mb-6 leading-relaxed">
+              "The future of Korea depends upon the education and enlightenment of its people."
+            </p>
+            <p className="text-blue-300 font-semibold">— Dr. Philip Jaisohn</p>
+          </div>
+        </div>
+      </section>
+
+      {/* How to Apply */}
+      <section className="py-20 px-6 bg-[#f3f4f6]">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-[#101661] text-center mb-12">How to Apply</h2>
+          <div className="grid sm:grid-cols-4 gap-8">
             {[
-              { step: "1", title: "Create Account", desc: "Sign up with Google or your email" },
-              { step: "2", title: "Choose & Apply", desc: "Browse opportunities and start your application" },
-              { step: "3", title: "Track Progress", desc: "Monitor your application status in real-time" },
-              { step: "4", title: "Get Notified", desc: "Receive updates on interviews and decisions" },
+              { step: "1", title: "Create Account", desc: "Sign up with Google or your email to get started." },
+              { step: "2", title: "Explore Opportunities", desc: "Browse our scholarships and internship programs." },
+              { step: "3", title: "Complete Application", desc: "Fill out your application and upload required documents." },
+              { step: "4", title: "Receive Decision", desc: "Track your status and receive a decision from our team." },
             ].map((item) => (
-              <div key={item.step} className="flex flex-col items-center">
-                <div className="w-12 h-12 bg-[#101661] text-white rounded-full flex items-center justify-center font-bold text-xl mb-3">
+              <div key={item.step} className="flex flex-col items-center text-center">
+                <div className="w-12 h-12 bg-[#101661] text-white rounded-full flex items-center justify-center font-bold text-xl mb-4">
                   {item.step}
                 </div>
-                <h3 className="font-semibold text-[#101661] mb-1">{item.title}</h3>
+                <h3 className="font-semibold text-[#101661] mb-2">{item.title}</h3>
                 <p className="text-gray-500 text-sm">{item.desc}</p>
               </div>
             ))}
           </div>
-          <div className="mt-12">
+          <div className="text-center mt-12">
             <Link
               href={applyHref}
-              className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-8 py-3 rounded-md text-lg transition-colors inline-block"
+              className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-10 py-3 rounded-md text-lg transition-colors inline-block"
             >
-              Get Started
+              Apply Now
             </Link>
           </div>
         </div>
@@ -123,6 +166,7 @@ export default function Home() {
           <div className="flex gap-6 text-sm">
             <a href="https://jaisohn.org/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 transition-colors">Official Website</a>
             <Link href="/scholarships" className="hover:text-blue-300 transition-colors">Opportunities</Link>
+            <Link href="/alumni" className="hover:text-blue-300 transition-colors">Alumni</Link>
             <Link href="/login" className="hover:text-blue-300 transition-colors">Login</Link>
           </div>
         </div>

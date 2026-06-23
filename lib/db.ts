@@ -36,9 +36,15 @@ export async function initDb() {
       description TEXT NOT NULL,
       award TEXT,
       slots INTEGER DEFAULT 1,
+      requirements TEXT,
+      deadline TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  // Add columns if they don't exist (for existing tables)
+  await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS requirements TEXT`;
+  await sql`ALTER TABLE opportunities ADD COLUMN IF NOT EXISTS deadline TEXT`;
+
   await sql`
     CREATE TABLE IF NOT EXISTS applications (
       id TEXT PRIMARY KEY,
@@ -62,17 +68,69 @@ export async function initDb() {
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS alumni (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      type TEXT NOT NULL,
+      opportunity_name TEXT NOT NULL,
+      university TEXT,
+      major TEXT,
+      year TEXT,
+      photo_path TEXT,
+      project TEXT,
+      quote TEXT,
+      display_order INTEGER DEFAULT 0,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
 
   // Seed opportunities
-  const existing = await sql`SELECT COUNT(*) as count FROM opportunities`;
-  if (Number(existing.rows[0].count) === 0) {
-    await sql`INSERT INTO opportunities (id, type, name, description, award, slots) VALUES
-      ('opp1', 'scholarship', 'Philip Jaisohn Leadership Scholarship', 'Awarded to outstanding students who demonstrate leadership potential and commitment to the Asian American community. Open to high school seniors and college students.', '$2,500', 3),
-      ('opp2', 'scholarship', 'Health & Human Services Scholarship', 'For students pursuing careers in healthcare, social work, or public health with a desire to serve underrepresented communities.', '$1,500', 2),
-      ('opp3', 'internship', 'Community Outreach Internship', 'Work with our outreach team to connect with the Korean American community in the Philadelphia area. Gain hands-on nonprofit experience.', 'Stipend: $500/month', 2),
-      ('opp4', 'internship', 'Health Services Internship', 'Support our health services programs, assist with patient coordination, and help run health screenings and events.', 'Stipend: $600/month', 1)
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-ibc', 'internship', 'Independence Blue Cross Nursing Internship', 'Awarded to 2 undergraduate nursing students from Jefferson College and the Community College of Philadelphia.', '$20/hr', 2, 'Undergraduate Nursing Student', 'Rolling')
     ON CONFLICT (id) DO NOTHING`;
-  }
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-wl', 'internship', 'Wooyoung Lee Internship', 'Awarded to 3 students a part of the New American Initiative PA (NAI-PA).', '$3,000', 3, 'Undergraduate', 'Rolling')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-ts', 'internship', 'Tong S. Suhr Internship', 'A 10 week internship open for all students with interests in journalism, communications, and leadership.', '$5,000', 1, 'Undergraduate & Graduate', 'Rolling')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-hl', 'internship', 'Helen Lee Internship', 'An 8 week internship open to Korean-American graduate students.', '$4,000', 1, 'Graduate', 'Rolling')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-kfh', 'internship', 'Kweon Family Hope Internship', 'A 6 week internship awarded to 2 Korean-American or Korean International students that demonstrate need.', '$3,000', 2, 'Undergraduate & Graduate', 'Rolling')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-hrc', 'internship', 'Hack Ryang Chung Internship', 'A 6 week internship open to all students with interests in healthcare and/or mental health.', '$3,000', 1, 'Undergraduate & Graduate', 'Rolling')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-hsko', 'internship', 'Henry S-K Oh Internship', 'A 5 week internship open to all students with interests in community service.', '$2,500', 1, 'Undergraduate & Graduate', 'Rolling')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-bhh', 'internship', 'Bong Hak Hyun Internship', 'A 4 week internship open to all students with interests in healthcare and/or mental health.', '$2,000', 1, 'Undergraduate', 'Rolling')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-jc', 'scholarship', 'Jaisohn Challenge Scholarship', 'Awarded to 2 students overcoming challenges.', '$3,000', 2, 'Undergraduate & Graduate', 'June 30, 2026')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-dy', 'scholarship', 'Daniel Yun Scholarship', 'Awarded to a Korean-American student with interests in healthcare.', '$1,500', 1, 'Undergraduate & Graduate', 'June 30, 2026')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-cl', 'scholarship', 'Chongsik Lee Scholarship', 'Awarded to a Korean-American student with interests in political science and international relations.', '$1,500', 1, 'Undergraduate & Graduate', 'June 30, 2026')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-tp', 'scholarship', 'Tang Pharmacy Scholarship', 'Awarded to a Korean-American student in good academic standing and with interests in volunteering and community service.', '$1,500', 1, 'Undergraduate & Graduate', 'June 30, 2026')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-jdf', 'scholarship', 'Jae and Dae Foundation Scholarship', 'Awarded to an African-American student in good academic standing with interests in community service and volunteering.', '$1,500', 1, 'Undergraduate & Graduate', 'June 30, 2026')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-brs', 'scholarship', 'Best Ride Services Scholarship', 'Awarded to a student that demonstrates leadership and volunteers for the community.', '$1,500', 1, 'Undergraduate & Graduate', 'June 30, 2026')
+    ON CONFLICT (id) DO NOTHING`;
+  await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
+    ('opp-hf', 'scholarship', 'Honam Friendship Scholarship', 'Awarded to a Korean-American student in good academic standing that demonstrates leadership.', '$1,500', 1, 'Undergraduate & Graduate', 'June 30, 2026')
+    ON CONFLICT (id) DO NOTHING`;
 
   // Seed reviewer
   const reviewer = await sql`SELECT id FROM users WHERE email = 'koseli.thakali@jaisohn.org'`;

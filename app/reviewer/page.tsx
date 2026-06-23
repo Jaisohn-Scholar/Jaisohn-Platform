@@ -94,8 +94,18 @@ export default function ReviewerPage() {
       <Navbar />
       <div className="max-w-6xl mx-auto w-full px-6 py-10 flex-1">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-[#101661]">Reviewer Portal</h1>
-          <p className="text-gray-500 mt-1">Review and manage all scholarship and internship applications.</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-[#101661]">Reviewer Portal</h1>
+              <p className="text-gray-500 mt-1">Review and manage all scholarship and internship applications.</p>
+            </div>
+            <Link
+              href="/reviewer/alumni"
+              className="bg-[#101661] hover:bg-blue-900 text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+            >
+              Manage Alumni
+            </Link>
+          </div>
         </div>
 
         {/* Stats */}
