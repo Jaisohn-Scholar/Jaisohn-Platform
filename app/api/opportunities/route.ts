@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import getDb from "@/lib/db";
+import { sql, ensureDb } from "@/lib/db";
 
 export async function GET() {
-  const db = getDb();
-  const opportunities = db.prepare("SELECT * FROM opportunities ORDER BY type, name").all();
-  return NextResponse.json(opportunities);
+  await ensureDb();
+  const result = await sql`SELECT * FROM opportunities ORDER BY type, name`;
+  return NextResponse.json(result.rows);
 }

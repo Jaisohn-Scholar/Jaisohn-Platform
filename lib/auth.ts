@@ -2,14 +2,12 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import getDb from "./db";
+import { sql, ensureDb } from "./db";
 import { randomUUID } from "crypto";
 
 export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
-  pages: {
-    signIn: "/login",
-  },
+  pages: { signIn: "/login" },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "placeholder",
@@ -25,39 +23,35 @@ export const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
-        const db = getDb();
+        await ensureDb();
 
         if (credentials.isSignUp === "true") {
-          // Sign up flow
-          const existing = db.prepare("SELECT id FROM users WHERE email = ?").get(credentials.email);
-          if (existing) throw new Error("Email already in use");
+          const existing = await sql`SELECT id FROM users WHERE email = ${credentials.email}`;
+          if (existing.rows.length > 0) throw new Error("Email already in use");
           const hash = bcrypt.hashSync(credentials.password, 10);
           const id = randomUUID();
-          db.prepare("INSERT INTO users (id, email, name, password, role) VALUES (?, ?, ?, ?, 'applicant')").run(
-            id, credentials.email, credentials.name || credentials.email.split("@")[0], hash
-          );
-          return { id, email: credentials.email, name: credentials.name || credentials.email.split("@")[0], role: "applicant" };
+          const displayName = credentials.name || credentials.email.split("@")[0];
+          await sql`INSERT INTO users (id, email, name, password, role) VALUES (${id}, ${credentials.email}, ${displayName}, ${hash}, 'applicant')`;
+          return { id, email: credentials.email, name: displayName, role: "applicant" } as any;
         }
 
-        // Login flow
-        const user = db.prepare("SELECT * FROM users WHERE email = ?").get(credentials.email) as any;
-        if (!user || !user.password) return null;
-        const valid = bcrypt.compareSync(credentials.password, user.password);
-        if (!valid) return null;
-        return { id: user.id, email: user.email, name: user.name, role: user.role };
+        const result = await sql`SELECT * FROM users WHERE email = ${credentials.email}`;
+        if (result.rows.length === 0) return null;
+        const user = result.rows[0];
+        if (!user.password || !bcrypt.compareSync(credentials.password, user.password)) return null;
+        return { id: user.id, email: user.email, name: user.name, role: user.role } as any;
       },
     }),
   ],
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider === "google") {
-        const db = getDb();
-        let dbUser = db.prepare("SELECT * FROM users WHERE email = ?").get(user.email!) as any;
+        await ensureDb();
+        const result = await sql`SELECT * FROM users WHERE email = ${user.email!}`;
+        let dbUser = result.rows[0];
         if (!dbUser) {
           const id = randomUUID();
-          db.prepare("INSERT INTO users (id, email, name, image, role) VALUES (?, ?, ?, ?, 'applicant')").run(
-            id, user.email, user.name, user.image
-          );
+          await sql`INSERT INTO users (id, email, name, image, role) VALUES (${id}, ${user.email}, ${user.name}, ${user.image}, 'applicant')`;
           dbUser = { id, role: "applicant" };
         }
         (user as any).role = dbUser.role;
