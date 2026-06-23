@@ -43,7 +43,7 @@ export default function AlumniPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="bg-[#101661] text-white py-16 px-6">
+      <section className="bg-[#101661] text-white py-16 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">Alumni Spotlight</h1>
           <p className="text-blue-200 text-lg max-w-2xl">
@@ -63,7 +63,7 @@ export default function AlumniPage() {
       </section>
 
       {/* Filter tabs */}
-      <section className="bg-[#f3f4f6] px-6 py-4 border-b border-gray-200">
+      <section className="bg-[#f3f4f6] px-8 sm:px-12 lg:px-20 py-4 border-b border-gray-200">
         <div className="max-w-7xl mx-auto flex gap-3">
           {(["all", "Scholar", "Intern"] as const).map((t) => {
             const count = t === "all" ? alumni.length : t === "Scholar" ? scholars.length : interns.length;
@@ -84,7 +84,7 @@ export default function AlumniPage() {
       </section>
 
       {/* Cards grid */}
-      <section className="py-12 px-6 flex-1">
+      <section className="py-12 px-8 sm:px-12 lg:px-20 flex-1">
         <div className="max-w-7xl mx-auto">
           {filtered.length === 0 ? (
             <div className="text-center text-gray-400 py-20">
@@ -161,7 +161,7 @@ export default function AlumniPage() {
         </div>
       </section>
 
-      <footer className="bg-[#101661] text-white py-6 px-6 text-center text-sm text-blue-300">
+      <footer className="bg-[#101661] text-white py-6 px-8 sm:px-12 lg:px-20 text-center text-sm text-blue-300">
         © {new Date().getFullYear()} Philip Jaisohn Memorial Foundation. 501(c)(3) Non-profit Organization.
       </footer>
     </div>

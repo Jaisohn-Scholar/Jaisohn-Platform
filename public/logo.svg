@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <!-- Circular background -->
+  <circle cx="60" cy="60" r="58" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+  <!-- P letter in navy -->
+  <text x="24" y="72" font-family="Georgia, serif" font-size="64" font-weight="bold" fill="#101661">P</text>
+  <!-- J letter in red, overlapping -->
+  <text x="52" y="72" font-family="Georgia, serif" font-size="64" font-weight="bold" fill="#b51f1f">J</text>
+  <!-- Year text -->
+  <text x="50%" y="100" font-family="Georgia, serif" font-size="11" fill="#101661" text-anchor="middle" font-weight="600" letter-spacing="2">1975</text>
+</svg>

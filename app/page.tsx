@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { Navbar } from "@/components/Navbar";
 
@@ -18,7 +19,7 @@ export default function Home() {
       <Navbar />
 
       {/* Hero */}
-      <section className="bg-[#101661] text-white py-20 px-6">
+      <section className="bg-[#101661] text-white py-20 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
             <div className="inline-flex items-center border border-white/30 rounded-full px-4 py-1 text-sm text-white/80 mb-6">
@@ -46,16 +47,15 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-center md:justify-end">
-            <div className="w-64 h-64 bg-white/10 rounded-full flex flex-col items-center justify-center border border-white/20">
-              <span className="text-white font-bold text-6xl">PJ</span>
-              <span className="text-white/70 text-lg mt-2">1975</span>
+            <div className="w-64 h-64 bg-white/10 rounded-full flex items-center justify-center border border-white/20 p-8">
+              <Image src="/logo.svg" alt="Philip Jaisohn Foundation" width={200} height={200} />
             </div>
           </div>
         </div>
       </section>
 
       {/* Stats bar */}
-      <section className="bg-[#f3f4f6] py-10 px-6">
+      <section className="bg-[#f3f4f6] py-10 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
           {[
             { value: "30+", label: "Years of Service" },
@@ -72,7 +72,7 @@ export default function Home() {
       </section>
 
       {/* About section */}
-      <section className="py-20 px-6 bg-white">
+      <section className="py-20 px-8 sm:px-12 lg:px-20 bg-white">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div className="rounded-xl bg-gray-200 aspect-video flex items-center justify-center text-6xl">
             🎓
@@ -101,7 +101,7 @@ export default function Home() {
       </section>
 
       {/* Legacy section */}
-      <section className="bg-[#101661] py-20 px-6">
+      <section className="bg-[#101661] py-20 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           <div>
             <h2 className="text-4xl font-bold text-white mb-6">The Legacy of Dr. Philip Jaisohn</h2>
@@ -126,7 +126,7 @@ export default function Home() {
       </section>
 
       {/* How to Apply */}
-      <section className="py-20 px-6 bg-[#f3f4f6]">
+      <section className="py-20 px-8 sm:px-12 lg:px-20 bg-[#f3f4f6]">
         <div className="max-w-7xl mx-auto">
           <h2 className="text-3xl font-bold text-[#101661] text-center mb-12">How to Apply</h2>
           <div className="grid sm:grid-cols-4 gap-8">
@@ -157,7 +157,7 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#101661] text-white py-8 px-6 mt-auto">
+      <footer className="bg-[#101661] text-white py-8 px-8 sm:px-12 lg:px-20 mt-auto">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
           <div>
             <p className="font-semibold">Philip Jaisohn Memorial Foundation</p>

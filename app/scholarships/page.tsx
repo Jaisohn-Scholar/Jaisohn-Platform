@@ -59,7 +59,7 @@ export default function ScholarshipsPage() {
       <Navbar />
 
       {/* Hero */}
-      <section className="bg-[#101661] text-white py-16 px-6">
+      <section className="bg-[#101661] text-white py-16 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
           <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">Scholarships &amp; Internships</h1>
           <p className="text-blue-200 text-lg mb-6 max-w-2xl">
@@ -70,14 +70,14 @@ export default function ScholarshipsPage() {
               🎓 {scholarships.length} Scholarships
             </span>
             <span className="inline-flex items-center gap-2 border border-white/40 rounded-full px-4 py-1.5 text-sm text-white/90">
-              🏢 {internships.length} Internships
+              💼 {internships.length} Internships
             </span>
           </div>
         </div>
       </section>
 
       {/* Filter tabs */}
-      <section className="bg-[#f3f4f6] px-6 py-4 border-b border-gray-200">
+      <section className="bg-[#f3f4f6] px-8 sm:px-12 lg:px-20 py-4 border-b border-gray-200">
         <div className="max-w-7xl mx-auto flex gap-3">
           {(["all", "scholarship", "internship"] as const).map((t) => {
             const count = t === "all" ? opportunities.length : t === "scholarship" ? scholarships.length : internships.length;
@@ -100,7 +100,7 @@ export default function ScholarshipsPage() {
       </section>
 
       {/* Cards grid */}
-      <section className="py-12 px-6 flex-1">
+      <section className="py-12 px-8 sm:px-12 lg:px-20 flex-1">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((opp) => (
             <div key={opp.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex flex-col">
@@ -110,7 +110,7 @@ export default function ScholarshipsPage() {
                     ? "bg-amber-100 text-amber-800"
                     : "bg-blue-50 text-blue-700"
                 }`}>
-                  {opp.type === "internship" ? "🏢 Internship" : "🎓 Scholarship"}
+                  {opp.type === "internship" ? "💼 Internship" : "🎓 Scholarship"}
                 </span>
                 {opp.award && (
                   <span className="text-green-700 font-semibold text-sm">{opp.award}</span>
@@ -140,7 +140,7 @@ export default function ScholarshipsPage() {
         </div>
       </section>
 
-      <footer className="bg-[#101661] text-white py-6 px-6 text-center text-sm text-blue-300">
+      <footer className="bg-[#101661] text-white py-6 px-8 sm:px-12 lg:px-20 text-center text-sm text-blue-300">
         © {new Date().getFullYear()} Philip Jaisohn Memorial Foundation. 501(c)(3) Non-profit Organization.
       </footer>
     </div>

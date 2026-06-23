@@ -99,12 +99,20 @@ export default function ReviewerPage() {
               <h1 className="text-3xl font-bold text-[#101661]">Reviewer Portal</h1>
               <p className="text-gray-500 mt-1">Review and manage all scholarship and internship applications.</p>
             </div>
-            <Link
-              href="/reviewer/alumni"
-              className="bg-[#101661] hover:bg-blue-900 text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
-            >
-              Manage Alumni
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href="/reviewer/opportunities"
+                className="border border-[#101661] text-[#101661] hover:bg-[#101661] hover:text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+              >
+                Manage Opportunities
+              </Link>
+              <Link
+                href="/reviewer/alumni"
+                className="bg-[#101661] hover:bg-blue-900 text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+              >
+                Manage Alumni
+              </Link>
+            </div>
           </div>
         </div>
 
