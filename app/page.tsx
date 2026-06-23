@@ -58,15 +58,14 @@ export default function Home() {
               Philip Jaisohn Memorial Foundation · Est. 1975
             </div>
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.05] mb-6 tracking-tight">
-              Scholarships<br />& Internships<br />
-              <span className="text-red-300">for Tomorrow's<br />Leaders</span>
+              Apply for<br />Scholarships<br />and Internships
             </h1>
             <p className="text-blue-200 text-lg mb-10 max-w-lg leading-relaxed">
               Empowering Asian-American students through education, opportunity, and community since 1975.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/scholarships"
+                href="/opportunities"
                 className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-8 py-3.5 rounded-md text-base transition-colors"
               >
                 View Opportunities
@@ -80,13 +79,12 @@ export default function Home() {
             </div>
           </div>
           <div className="flex justify-center md:justify-end">
-            <div className="relative">
+            <div className="bg-white rounded-2xl p-10 shadow-2xl ml-8">
               <Image
                 src="/logo.png"
                 alt="Philip Jaisohn Foundation"
-                width={320}
-                height={280}
-                className="drop-shadow-2xl"
+                width={280}
+                height={240}
                 priority
               />
             </div>
@@ -150,7 +148,7 @@ export default function Home() {
       <section className="bg-[#101661] py-24 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
           <div>
-            <p className="text-red-300 font-semibold text-sm uppercase tracking-widest mb-3">Our Legacy</p>
+            <p className="text-blue-200 font-semibold text-sm uppercase tracking-widest mb-3">Our Legacy</p>
             <h2 className="text-4xl font-bold text-white mb-6 leading-tight">The Legacy of Dr. Philip Jaisohn</h2>
             <p className="text-blue-100 mb-4 leading-relaxed">
               Dr. Philip Jaisohn (1864–1951) was a groundbreaking figure in both Korean and American history. He fled Korea after leading the failed Gapsin Coup, came to America, earned a medical degree from George Washington University, and became the first Korean to be naturalized as a United States citizen in 1890.
@@ -163,7 +161,7 @@ export default function Home() {
             </p>
           </div>
           <div className="bg-white/10 backdrop-blur rounded-2xl p-10 border border-white/20">
-            <div className="text-5xl text-red-300 mb-6 font-serif">"</div>
+            <div className="text-5xl text-blue-200 mb-6 font-serif">"</div>
             <p className="text-white text-2xl font-semibold leading-relaxed mb-6">
               The future of Korea depends upon the education and enlightenment of its people.
             </p>
@@ -226,7 +224,7 @@ export default function Home() {
           </div>
           <div className="flex gap-6 text-sm">
             <a href="https://jaisohn.org/" target="_blank" rel="noopener noreferrer" className="hover:text-blue-300 transition-colors">Official Website</a>
-            <Link href="/scholarships" className="hover:text-blue-300 transition-colors">Opportunities</Link>
+            <Link href="/opportunities" className="hover:text-blue-300 transition-colors">Opportunities</Link>
             <Link href="/alumni" className="hover:text-blue-300 transition-colors">Alumni</Link>
             <Link href="/login" className="hover:text-blue-300 transition-colors">Login</Link>
           </div>

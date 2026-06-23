@@ -185,39 +185,44 @@ export default function PortalPage() {
       {/* New Application Modal */}
       {showNewAppModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold text-[#101661] mb-4">Start New Application</h2>
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl flex flex-col max-h-[80vh]">
+            <div className="p-6 border-b border-gray-100">
+              <h2 className="text-xl font-bold text-[#101661]">Start New Application</h2>
+              <p className="text-sm text-gray-500 mt-1">Select an opportunity to begin your application.</p>
+            </div>
             {error && (
-              <div className="text-red-600 text-sm bg-red-50 border border-red-200 rounded-md px-3 py-2 mb-4">
+              <div className="mx-6 mt-4 text-red-600 text-sm bg-red-50 border border-red-200 rounded-md px-3 py-2">
                 {error}
               </div>
             )}
-            <div className="space-y-3">
-              {opportunities.filter((o) => {
-                if (o.type === "scholarship" && hasScholarship) return false;
-                if (o.type === "internship" && hasInternship) return false;
-                return true;
-              }).map((opp) => (
-                <button
-                  key={opp.id}
-                  onClick={() => startApplication(opp.id)}
-                  className="w-full text-left p-4 border border-gray-200 rounded-xl hover:border-[#101661] hover:bg-blue-50 transition-colors"
-                >
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${opp.type === "scholarship" ? "bg-blue-100 text-[#101661]" : "bg-purple-100 text-purple-800"}`}>
-                      {opp.type === "scholarship" ? "Scholarship" : "Internship"}
+            <div className="overflow-y-auto flex-1 p-6">
+              <div className="grid grid-cols-2 gap-3">
+                {opportunities.filter((o) => {
+                  if (o.type === "scholarship" && hasScholarship) return false;
+                  if (o.type === "internship" && hasInternship) return false;
+                  return true;
+                }).map((opp) => (
+                  <button
+                    key={opp.id}
+                    onClick={() => startApplication(opp.id)}
+                    className="text-left p-4 border border-gray-200 rounded-xl hover:border-[#101661] hover:bg-blue-50 transition-colors"
+                  >
+                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium inline-block mb-2 ${opp.type === "scholarship" ? "bg-blue-100 text-[#101661]" : "bg-purple-100 text-purple-800"}`}>
+                      {opp.type === "scholarship" ? "🎓 Scholarship" : "💼 Internship"}
                     </span>
-                  </div>
-                  <p className="font-medium text-[#101661]">{opp.name}</p>
-                </button>
-              ))}
+                    <p className="font-semibold text-[#101661] text-sm leading-snug">{opp.name}</p>
+                  </button>
+                ))}
+              </div>
             </div>
-            <button
-              onClick={() => { setShowNewAppModal(false); setError(""); }}
-              className="mt-4 w-full py-2 text-gray-500 hover:text-gray-700 text-sm transition-colors"
-            >
-              Cancel
-            </button>
+            <div className="p-4 border-t border-gray-100">
+              <button
+                onClick={() => { setShowNewAppModal(false); setError(""); }}
+                className="w-full py-2 text-gray-500 hover:text-gray-700 text-sm transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -21,5 +21,6 @@ body {
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-serif), Georgia, serif;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
 }
