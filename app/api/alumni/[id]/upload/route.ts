@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sql, ensureDb } from "@/lib/db";
-import { put } from "@vercel/blob";
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -16,9 +15,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const file = formData.get("photo") as File | null;
   if (!file) return NextResponse.json({ error: "No file" }, { status: 400 });
 
-  const ext = file.name.split(".").pop() || "jpg";
-  const blob = await put(`alumni/${id}/photo.${ext}`, file, { access: "public", addRandomSuffix: false });
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const base64 = buffer.toString("base64");
+  const mimeType = file.type || "image/jpeg";
+  const dataUrl = `data:${mimeType};base64,${base64}`;
 
-  await sql`UPDATE alumni SET photo_path = ${blob.url} WHERE id = ${id}`;
-  return NextResponse.json({ photo_path: blob.url });
+  await sql`UPDATE alumni SET photo_path = ${dataUrl} WHERE id = ${id}`;
+  return NextResponse.json({ photo_path: dataUrl });
 }
