@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sql, ensureDb } from "@/lib/db";
+import { sendStatusEmail } from "@/lib/email";
+
+const EMAIL_TRIGGER_STATUSES = new Set(["accepted", "rejected", "interview_requested"]);
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -26,8 +29,11 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
   if (user.role !== "reviewer" && app.user_id !== user.id) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
-  // Parse JSON fields
-  try { app.required_fields = JSON.parse(app.required_fields || '["name","email","school","year","birthday"]'); } catch { app.required_fields = ["name","email","school","year","birthday"]; }
+  // Parse JSON fields; always ensure email is included
+  let requiredFields: string[];
+  try { requiredFields = JSON.parse(app.required_fields || '["name","email","school","year","birthday"]'); } catch { requiredFields = ["name","email","school","year","birthday"]; }
+  if (!requiredFields.includes("email")) requiredFields = ["email", ...requiredFields];
+  app.required_fields = requiredFields;
   try { app.required_docs = JSON.parse(app.required_docs || '["resume","transcript"]'); } catch { app.required_docs = ["resume","transcript"]; }
   return NextResponse.json(app);
 }
@@ -39,7 +45,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   await ensureDb();
   const user = session.user as any;
-  const appResult = await sql`SELECT * FROM applications WHERE id = ${id}`;
+  const appResult = await sql`
+    SELECT a.*, u.name as user_name, u.email as user_email, o.name as opportunity_name
+    FROM applications a
+    JOIN users u ON a.user_id = u.id
+    JOIN opportunities o ON a.opportunity_id = o.id
+    WHERE a.id = ${id}
+  `;
   if (appResult.rows.length === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
   const app = appResult.rows[0];
 
@@ -47,6 +59,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
 
   if (user.role === "reviewer") {
     const { status, score, reviewNotes, essay1Score, essay2Score, essay3Score, resumeScore, transcriptScore } = body;
+    const prevStatus = app.status;
     await sql`
       UPDATE applications SET
         status = COALESCE(${status ?? null}, status),
@@ -60,6 +73,16 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         updated_at = NOW()
       WHERE id = ${id}
     `;
+    // Send email when status changes to a notifiable state
+    if (status && status !== prevStatus && EMAIL_TRIGGER_STATUSES.has(status)) {
+      sendStatusEmail({
+        to: app.user_email,
+        studentName: app.user_name,
+        opportunityName: app.opportunity_name,
+        status: status as "accepted" | "rejected" | "interview_requested",
+        reviewerEmail: user.email,
+      }).catch((err: unknown) => console.error("Email send failed:", err));
+    }
     return NextResponse.json({ success: true });
   }
 
