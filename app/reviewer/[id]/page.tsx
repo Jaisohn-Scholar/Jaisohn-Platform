@@ -15,6 +15,9 @@ interface Application {
   essay1: string | null;
   essay2: string | null;
   essay3: string | null;
+  essay1_prompt: string | null;
+  essay2_prompt: string | null;
+  essay3_prompt: string | null;
   resume_path: string | null;
   transcript_path: string | null;
   score: number | null;
@@ -186,12 +189,12 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
         </div>
 
         <div className="space-y-6">
-          {/* Essays */}
+          {/* Essays — only show those with a configured prompt */}
           {[
-            { label: "Essay 1 — About Yourself", text: app.essay1, score: essay1Score, setScore: setEssay1Score, prompt: "Tell us about yourself and why you are interested in this opportunity." },
-            { label: "Essay 2 — Leadership & Impact", text: app.essay2, score: essay2Score, setScore: setEssay2Score, prompt: "Describe a time you demonstrated leadership or made an impact in your community." },
-            { label: "Essay 3 — Future Goals", text: app.essay3, score: essay3Score, setScore: setEssay3Score, prompt: "What are your future goals and how will this opportunity help you achieve them?" },
-          ].map(({ label, text, score, setScore, prompt }) => (
+            { label: "Essay 1", text: app.essay1, score: essay1Score, setScore: setEssay1Score, prompt: app.essay1_prompt },
+            { label: "Essay 2", text: app.essay2, score: essay2Score, setScore: setEssay2Score, prompt: app.essay2_prompt },
+            { label: "Essay 3", text: app.essay3, score: essay3Score, setScore: setEssay3Score, prompt: app.essay3_prompt },
+          ].filter(e => !!e.prompt).map(({ label, text, score, setScore, prompt }) => (
             <div key={label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
               <h2 className="font-semibold text-[#101661] mb-0.5">{label}</h2>
               <p className="text-xs text-gray-400 mb-3 italic">{prompt}</p>
