@@ -104,6 +104,15 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
     setApp((a) => a ? { ...a, status: newStatus } : a);
   }
 
+  async function decide(newStatus: "accepted" | "rejected" | "interview_requested") {
+    await fetch(`/api/applications/${id}/decision`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: newStatus }),
+    });
+    setApp((a) => a ? { ...a, status: newStatus } : a);
+  }
+
   async function saveReview() {
     setSaving(true);
     const scores = [essay1Score, essay2Score, essay3Score, resumeScore, transcriptScore].filter(Boolean) as number[];
@@ -256,7 +265,7 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
               </button>
               <button
                 onClick={() => {
-                  if (confirm("Reject this application? The student will be notified by email.")) updateStatus("rejected");
+                  if (confirm("Reject this application? The student will be notified by email.")) decide("rejected");
                 }}
                 className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "rejected" ? "bg-red-700 text-white ring-2 ring-red-300" : "bg-[#b51f1f] hover:bg-red-700 text-white"}`}
               >
@@ -264,16 +273,15 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
               </button>
               <button
                 onClick={() => {
-                  if (confirm("Request an interview? The student will be notified by email.")) notifyStudent();
+                  if (confirm("Request an interview? The student will be notified by email.")) decide("interview_requested");
                 }}
-                disabled={notifying}
                 className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "interview_requested" ? "bg-orange-600 text-white ring-2 ring-orange-300" : "bg-orange-500 hover:bg-orange-600 text-white"}`}
               >
-                {app.status === "interview_requested" ? "✓ Interview Requested" : notifying ? "Sending..." : "Request Interview"}
+                {app.status === "interview_requested" ? "✓ Interview Requested" : "Request Interview"}
               </button>
               <button
                 onClick={() => {
-                  if (confirm("Accept this application? The student will be notified by email.")) updateStatus("accepted");
+                  if (confirm("Accept this application? The student will be notified by email.")) decide("accepted");
                 }}
                 className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "accepted" ? "bg-green-700 text-white ring-2 ring-green-300" : "bg-green-600 hover:bg-green-700 text-white"}`}
               >
