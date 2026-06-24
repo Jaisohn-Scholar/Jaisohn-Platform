@@ -126,7 +126,6 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
     setNotifying(true);
     await fetch(`/api/applications/${id}/notify`, { method: "POST" });
     setNotifying(false);
-    setNotified(true);
     setApp((a) => a ? { ...a, status: "interview_requested" } : a);
   }
 
@@ -255,36 +254,32 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
               >
                 {saving ? "Saving..." : saved ? "✓ Saved" : "Save Review"}
               </button>
-              {STATUSES.map((s) => (
-                <button
-                  key={s.value}
-                  onClick={() => updateStatus(s.value)}
-                  className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${
-                    app.status === s.value
-                      ? "bg-orange-500 text-white"
-                      : "bg-orange-500 hover:bg-orange-600 text-white opacity-40 hover:opacity-70"
-                  }`}
-                >
-                  {s.label}
-                </button>
-              ))}
               <button
-                onClick={notifyStudent}
-                disabled={notifying || notified || app.status === "interview_requested"}
-                className="bg-orange-500 hover:bg-orange-600 disabled:bg-gray-400 text-white font-medium px-5 py-2.5 rounded-md transition-colors"
+                onClick={() => {
+                  if (confirm("Reject this application? The student will be notified by email.")) updateStatus("rejected");
+                }}
+                className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "rejected" ? "bg-red-700 text-white ring-2 ring-red-300" : "bg-[#b51f1f] hover:bg-red-700 text-white"}`}
               >
-                {notified || app.status === "interview_requested"
-                  ? "✓ Student Notified"
-                  : notifying
-                  ? "Notifying..."
-                  : "Request Interview & Notify Student"}
+                {app.status === "rejected" ? "✓ Rejected" : "Reject"}
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm("Request an interview? The student will be notified by email.")) notifyStudent();
+                }}
+                disabled={notifying}
+                className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "interview_requested" ? "bg-orange-600 text-white ring-2 ring-orange-300" : "bg-orange-500 hover:bg-orange-600 text-white"}`}
+              >
+                {app.status === "interview_requested" ? "✓ Interview Requested" : notifying ? "Sending..." : "Request Interview"}
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm("Accept this application? The student will be notified by email.")) updateStatus("accepted");
+                }}
+                className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "accepted" ? "bg-green-700 text-white ring-2 ring-green-300" : "bg-green-600 hover:bg-green-700 text-white"}`}
+              >
+                {app.status === "accepted" ? "✓ Accepted" : "Accept"}
               </button>
             </div>
-            {(notified || app.status === "interview_requested") && (
-              <p className="text-sm text-orange-600 mt-3 bg-orange-50 border border-orange-200 rounded-md px-3 py-2">
-                ✉️ The student has been notified of the interview request. The team will email them to schedule a meeting.
-              </p>
-            )}
           </div>
         </div>
       </div>
