@@ -247,7 +247,25 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
           {/* Actions */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
             <h2 className="font-semibold text-[#101661] mb-4">Actions</h2>
-            <div className="flex flex-wrap gap-3">
+            <div className="mb-4">
+              <p className="text-xs font-medium text-gray-500 mb-2">Application Status</p>
+              <div className="flex flex-wrap gap-2">
+                {STATUSES.map((s) => (
+                  <button
+                    key={s.value}
+                    onClick={() => updateStatus(s.value)}
+                    className={`px-4 py-2 rounded-md text-sm font-medium border transition-colors ${
+                      app.status === s.value
+                        ? "bg-[#101661] text-white border-[#101661]"
+                        : "bg-white text-gray-600 border-gray-300 hover:border-[#101661] hover:text-[#101661]"
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-3 pt-4 border-t border-gray-100">
               <button
                 onClick={saveReview}
                 disabled={saving}
