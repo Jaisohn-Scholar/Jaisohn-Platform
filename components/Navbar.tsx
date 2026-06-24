@@ -21,7 +21,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-3">
             <Image src="/logo.png" alt="PJ Logo" width={40} height={40} className="rounded-lg" />
-            <span className="font-bold text-lg hidden sm:block text-[#101661]">Philip Jaisohn Foundation</span>
+            <span className="font-bold text-lg hidden sm:block text-[#101661]">Philip Jaisohn Memorial Foundation</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-6 text-sm font-medium">
