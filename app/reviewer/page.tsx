@@ -101,6 +101,12 @@ export default function ReviewerPage() {
             </div>
             <div className="flex gap-3">
               <Link
+                href="/reviewer/accounts"
+                className="border border-gray-300 text-gray-700 hover:border-[#101661] hover:text-[#101661] font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+              >
+                Manage Reviewers
+              </Link>
+              <Link
                 href="/reviewer/opportunities"
                 className="border border-[#101661] text-[#101661] hover:bg-[#101661] hover:text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
               >
