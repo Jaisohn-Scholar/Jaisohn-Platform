@@ -21,11 +21,11 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       slots = COALESCE(${slots ?? null}, slots),
       requirements = ${requirements ?? null},
       deadline = ${deadline ?? null},
-      required_fields = COALESCE(${required_fields != null ? JSON.stringify(required_fields) : null}, required_fields),
-      required_docs = COALESCE(${required_docs != null ? JSON.stringify(required_docs) : null}, required_docs),
-      essay1_prompt = COALESCE(${essay1_prompt ?? null}, essay1_prompt),
-      essay2_prompt = COALESCE(${essay2_prompt ?? null}, essay2_prompt),
-      essay3_prompt = COALESCE(${essay3_prompt ?? null}, essay3_prompt)
+      required_fields = ${required_fields != null ? JSON.stringify(required_fields) : '["name","email","school","year","birthday"]'},
+      required_docs = ${required_docs != null ? JSON.stringify(required_docs) : '["resume","transcript"]'},
+      essay1_prompt = ${essay1_prompt ?? null},
+      essay2_prompt = ${essay2_prompt ?? null},
+      essay3_prompt = ${essay3_prompt ?? null}
     WHERE id = ${id}
   `;
   const result = await sql`SELECT * FROM opportunities WHERE id = ${id}`;
