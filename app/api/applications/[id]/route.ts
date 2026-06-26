@@ -128,7 +128,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   const user = session.user as any;
   const appResult = await sql`SELECT * FROM applications WHERE id = ${id}`;
   if (appResult.rows.length === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
-  if (appResult.rows[0].user_id !== user.id) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  if (user.role !== "reviewer" && appResult.rows[0].user_id !== user.id) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   await sql`DELETE FROM applications WHERE id = ${id}`;
   return NextResponse.json({ success: true });
