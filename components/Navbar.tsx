@@ -64,6 +64,10 @@ export function Navbar() {
                           My Portal
                         </Link>
                       )}
+                      <Link href="/profile" className="block px-4 py-2 hover:bg-gray-100" onClick={() => setMenuOpen(false)}>
+                        My Profile
+                      </Link>
+                      <div className="border-t border-gray-100" />
                       <button
                         onClick={() => { setMenuOpen(false); signOut({ callbackUrl: "/" }); }}
                         className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"

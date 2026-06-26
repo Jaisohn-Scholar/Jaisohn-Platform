@@ -345,6 +345,17 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
               >
                 {app.status === "accepted" ? "✓ Accepted" : "Accept"}
               </button>
+              <button
+                onClick={async () => {
+                  if (confirm(`Permanently delete this application from ${app.user_name}? This cannot be undone.`)) {
+                    await fetch(`/api/applications/${id}`, { method: "DELETE" });
+                    router.push("/reviewer");
+                  }
+                }}
+                className="px-5 py-2.5 rounded-md text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors ml-auto"
+              >
+                Delete Application
+              </button>
             </div>
           </div>
         </div>
