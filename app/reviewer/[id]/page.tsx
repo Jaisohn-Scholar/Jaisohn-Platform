@@ -31,6 +31,15 @@ interface Application {
   created_at: string;
 }
 
+interface Comment {
+  id: string;
+  reviewer_id: string;
+  reviewer_name: string;
+  reviewer_email: string;
+  comment: string;
+  created_at: string;
+}
+
 const STATUSES = [
   { value: "submitted", label: "Submitted" },
   { value: "under_review", label: "Under Review" },
@@ -65,7 +74,9 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
   const { data: session, status } = useSession();
   const router = useRouter();
   const [app, setApp] = useState<Application | null>(null);
-  const [notes, setNotes] = useState("");
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [newComment, setNewComment] = useState("");
+  const [postingComment, setPostingComment] = useState(false);
   const [essay1Score, setEssay1Score] = useState<number | null>(null);
   const [essay2Score, setEssay2Score] = useState<number | null>(null);
   const [essay3Score, setEssay3Score] = useState<number | null>(null);
@@ -73,8 +84,6 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
   const [transcriptScore, setTranscriptScore] = useState<number | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [notifying, setNotifying] = useState(false);
-  const [notified, setNotified] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") { router.push("/login"); return; }
@@ -82,6 +91,7 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
       const user = session.user as any;
       if (user.role !== "reviewer") { router.push("/portal"); return; }
       loadApp();
+      loadComments();
     }
   }, [status]);
 
@@ -90,12 +100,16 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
     if (!res.ok) { router.push("/reviewer"); return; }
     const data = await res.json();
     setApp(data);
-    setNotes(data.review_notes || "");
     setEssay1Score(data.essay1_score);
     setEssay2Score(data.essay2_score);
     setEssay3Score(data.essay3_score);
     setResumeScore(data.resume_score);
     setTranscriptScore(data.transcript_score);
+  }
+
+  async function loadComments() {
+    const res = await fetch(`/api/applications/${id}/comments`);
+    if (res.ok) setComments(await res.json());
   }
 
   async function updateStatus(newStatus: string) {
@@ -123,22 +137,33 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
     await fetch(`/api/applications/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        reviewNotes: notes,
-        score: avgScore,
-        essay1Score, essay2Score, essay3Score, resumeScore, transcriptScore,
-      }),
+      body: JSON.stringify({ score: avgScore, essay1Score, essay2Score, essay3Score, resumeScore, transcriptScore }),
     });
     setSaving(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   }
 
-  async function notifyStudent() {
-    setNotifying(true);
-    await fetch(`/api/applications/${id}/notify`, { method: "POST" });
-    setNotifying(false);
-    setApp((a) => a ? { ...a, status: "interview_requested" } : a);
+  async function postComment(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newComment.trim()) return;
+    setPostingComment(true);
+    const res = await fetch(`/api/applications/${id}/comments`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ comment: newComment }),
+    });
+    if (res.ok) {
+      const created = await res.json();
+      setComments(prev => [...prev, created]);
+      setNewComment("");
+    }
+    setPostingComment(false);
+  }
+
+  async function deleteComment(commentId: string) {
+    await fetch(`/api/applications/${id}/comments/${commentId}`, { method: "DELETE" });
+    setComments(prev => prev.filter(c => c.id !== commentId));
   }
 
   if (!app) {
@@ -243,16 +268,46 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
             </div>
           </div>
 
-          {/* Notes */}
+          {/* Comments */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h2 className="font-semibold text-[#101661] mb-3">Reviewer Notes</h2>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={4}
-              placeholder="Add notes about this application..."
-              className="w-full border border-gray-200 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661] resize-y"
-            />
+            <h2 className="font-semibold text-[#101661] mb-4">Reviewer Comments</h2>
+            {comments.length === 0 ? (
+              <p className="text-sm text-gray-400 italic mb-4">No comments yet. Be the first to leave a note.</p>
+            ) : (
+              <div className="space-y-3 mb-4">
+                {comments.map(c => (
+                  <div key={c.id} className="flex gap-3">
+                    <div className="w-8 h-8 rounded-full bg-[#101661] flex items-center justify-center text-xs font-bold text-white shrink-0">
+                      {c.reviewer_name?.[0]?.toUpperCase() || "R"}
+                    </div>
+                    <div className="flex-1 bg-gray-50 rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-semibold text-[#101661]">{c.reviewer_name}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-gray-400">{new Date(c.created_at).toLocaleString()}</span>
+                          {c.reviewer_id === (session?.user as any)?.id && (
+                            <button onClick={() => deleteComment(c.id)} className="text-xs text-red-400 hover:text-red-600 transition-colors">Delete</button>
+                          )}
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-700 whitespace-pre-wrap">{c.comment}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            <form onSubmit={postComment} className="flex gap-2">
+              <input
+                value={newComment}
+                onChange={e => setNewComment(e.target.value)}
+                placeholder="Add a comment..."
+                className="flex-1 border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+              />
+              <button type="submit" disabled={postingComment || !newComment.trim()}
+                className="bg-[#101661] hover:bg-blue-900 disabled:opacity-40 text-white font-medium px-4 py-2 rounded-md text-sm transition-colors">
+                {postingComment ? "Posting..." : "Post"}
+              </button>
+            </form>
           </div>
 
           {/* Actions */}

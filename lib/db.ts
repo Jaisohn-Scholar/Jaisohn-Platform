@@ -103,6 +103,17 @@ export async function initDb() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  await sql`
+    CREATE TABLE IF NOT EXISTS application_comments (
+      id TEXT PRIMARY KEY,
+      application_id TEXT NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+      reviewer_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      reviewer_name TEXT NOT NULL,
+      reviewer_email TEXT NOT NULL,
+      comment TEXT NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
 
   // Seed opportunities
   await sql`INSERT INTO opportunities (id, type, name, description, award, slots, requirements, deadline) VALUES
