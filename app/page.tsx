@@ -38,7 +38,7 @@ export default function Home() {
   }, 0);
 
   const totalSlots = opportunities.reduce((s, o) => s + o.slots, 0);
-  const yearsOfService = new Date().getFullYear() - 1975;
+  const yearsOfService = "25+";
 
   const formatAward = (n: number) => {
     if (n >= 1000) return `$${(n / 1000).toFixed(0)}K+`;
@@ -61,7 +61,7 @@ export default function Home() {
               Apply for<br />Scholarships<br />and Internships
             </h1>
             <p className="text-blue-200 text-lg mb-10 max-w-lg leading-relaxed">
-              Empowering Asian-American students through education, opportunity, and community since 1975.
+              Empowering diverse students through education, opportunity, and community.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
@@ -96,7 +96,7 @@ export default function Home() {
       <section className="bg-white border-b border-gray-100 py-10 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8 text-center">
           {[
-            { value: `${yearsOfService}+`, label: "Years of Service" },
+            { value: yearsOfService, label: "Years of Service" },
             { value: opportunities.length > 0 ? formatAward(totalAwarded) : "—", label: "Awarded Annually" },
             { value: opportunities.length > 0 ? `${totalSlots}+` : "—", label: "Recipients Per Year" },
             { value: `${opportunities.length || "—"}`, label: "Programs Available" },
@@ -125,10 +125,10 @@ export default function Home() {
             <p className="text-[#b51f1f] font-semibold text-sm uppercase tracking-widest mb-3">About Us</p>
             <h2 className="text-4xl font-bold text-[#101661] mb-6 leading-tight">About the Philip Jaisohn Memorial Foundation</h2>
             <p className="text-gray-600 mb-4 leading-relaxed">
-              The Philip Jaisohn Memorial Foundation is a non-profit organization established in 1975 in memory of Dr. Philip Jaisohn (Seo Jae-pil), a visionary Korean-American pioneer, physician, and the first Korean naturalized citizen of the United States.
+              The Philip Jaisohn Memorial Foundation is a non-profit organization established in 1975 in memory of Dr. Philip Jaisohn (Soh Jai-pil), a visionary Korean-American pioneer, physician, and the first Korean naturalized citizen of the United States.
             </p>
             <p className="text-gray-600 mb-4 leading-relaxed">
-              Located in Philadelphia, Pennsylvania, the Foundation serves the Korean-American community across the Greater Philadelphia region through health services, cultural programs, senior care, and educational scholarships.
+              Located in Philadelphia, Pennsylvania, the Foundation serves the Asian-American and underserved communities across the Greater Philadelphia region through health services, cultural programs, senior care, and educational scholarships.
             </p>
             <p className="text-gray-600 mb-8 leading-relaxed">
               Each year, the Foundation awards scholarships and internship opportunities to outstanding students who demonstrate academic excellence, community involvement, and a commitment to Dr. Jaisohn's legacy.
@@ -152,13 +152,13 @@ export default function Home() {
             <p className="text-blue-200 font-semibold text-sm uppercase tracking-widest mb-3">Our Legacy</p>
             <h2 className="text-4xl font-bold text-white mb-6 leading-tight">The Legacy of Dr. Philip Jaisohn</h2>
             <p className="text-blue-100 mb-4 leading-relaxed">
-              Dr. Philip Jaisohn (1864–1951) was a groundbreaking figure in both Korean and American history. He fled Korea after leading the failed Gapsin Coup, came to America, earned a medical degree from George Washington University, and became the first Korean to be naturalized as a United States citizen in 1890.
+              Dr. Philip Jaisohn (1864–1951) was a groundbreaking figure in both Korean and American history. He fled Korea after leading the failed Gapsin Coup, came to America, became the first Korean to be naturalized as a United States citizen in 1890, then earned a medical degree from George Washington University in 1892.
             </p>
             <p className="text-blue-100 mb-4 leading-relaxed">
               A physician, publisher, and reformer, Dr. Jaisohn devoted his life to justice, democracy, and the advancement of the Korean people. He founded The Independent, Korea's first modern newspaper, advocating for independence and modernization.
             </p>
             <p className="text-blue-100 leading-relaxed">
-              The Foundation bearing his name continues his work — bridging cultures, empowering communities, and investing in the leaders of tomorrow.
+              The Foundation bearing his name continues his legacy — bridging cultures, empowering communities, and investing in the leaders of tomorrow.
             </p>
           </div>
           <div className="bg-white rounded-2xl p-10 shadow-xl">
