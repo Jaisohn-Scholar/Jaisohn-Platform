@@ -12,6 +12,10 @@ interface Application {
   opportunity_name: string;
   opportunity_type: string;
   status: string;
+  required_fields: string[];
+  applicant_school: string | null;
+  applicant_year: string | null;
+  applicant_birthday: string | null;
   essay1: string | null;
   essay2: string | null;
   essay3: string | null;
@@ -20,6 +24,11 @@ interface Application {
   essay3_prompt: string | null;
   resume_path: string | null;
   transcript_path: string | null;
+  cover_letter_path: string | null;
+  rec_letter_path: string | null;
+  financial_need_path: string | null;
+  supporting_docs_path: string | null;
+  required_docs: string[];
   score: number | null;
   review_notes: string | null;
   essay1_score: number | null;
@@ -214,6 +223,45 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
         </div>
 
         <div className="space-y-6">
+          {/* Personal Information */}
+          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <h2 className="font-semibold text-[#101661] mb-4">Applicant Information</h2>
+            <div className="grid grid-cols-2 gap-4">
+              {app.required_fields?.includes("name") && (
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1">Full Name</p>
+                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.user_name || "—"}</p>
+                </div>
+              )}
+              {app.required_fields?.includes("email") && (
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1">Email Address</p>
+                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.user_email || "—"}</p>
+                </div>
+              )}
+              {app.required_fields?.includes("school") && (
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1">School / University</p>
+                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.applicant_school || <span className="text-gray-400 italic">Not provided</span>}</p>
+                </div>
+              )}
+              {app.required_fields?.includes("year") && (
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1">Year / Grade Level</p>
+                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.applicant_year || <span className="text-gray-400 italic">Not provided</span>}</p>
+                </div>
+              )}
+              {app.required_fields?.includes("birthday") && (
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1">Date of Birth</p>
+                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">
+                    {app.applicant_birthday ? new Date(app.applicant_birthday).toLocaleDateString() : <span className="text-gray-400 italic">Not provided</span>}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
           {/* Essays — only show those with a configured prompt */}
           {[
             { label: "Essay 1", text: app.essay1, score: essay1Score, setScore: setEssay1Score, prompt: app.essay1_prompt },
@@ -234,39 +282,38 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
           ))}
 
           {/* Documents */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h2 className="font-semibold text-[#101661] mb-4">Submitted Documents</h2>
-            <div className="grid sm:grid-cols-2 gap-4">
-              <div className="border border-gray-200 rounded-lg p-4">
-                <p className="font-medium text-sm text-[#101661] mb-1">Resume</p>
-                {app.resume_path ? (
-                  <a href={app.resume_path} target="_blank" rel="noopener noreferrer" className="text-sm text-[#b51f1f] hover:underline">
-                    View Resume →
-                  </a>
-                ) : (
-                  <p className="text-sm text-gray-400 italic">Not uploaded</p>
-                )}
-                <div className="mt-2">
-                  <p className="text-xs font-medium text-gray-500">Score: <span className="text-[#101661]">{resumeScore ?? "Not scored"}</span></p>
-                  <ScoreButtons value={resumeScore} onChange={setResumeScore} />
-                </div>
-              </div>
-              <div className="border border-gray-200 rounded-lg p-4">
-                <p className="font-medium text-sm text-[#101661] mb-1">Transcript</p>
-                {app.transcript_path ? (
-                  <a href={app.transcript_path} target="_blank" rel="noopener noreferrer" className="text-sm text-[#b51f1f] hover:underline">
-                    View Transcript →
-                  </a>
-                ) : (
-                  <p className="text-sm text-gray-400 italic">Not uploaded</p>
-                )}
-                <div className="mt-2">
-                  <p className="text-xs font-medium text-gray-500">Score: <span className="text-[#101661]">{transcriptScore ?? "Not scored"}</span></p>
-                  <ScoreButtons value={transcriptScore} onChange={setTranscriptScore} />
-                </div>
+          {(app.required_docs?.length ?? 0) > 0 && (
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <h2 className="font-semibold text-[#101661] mb-4">Submitted Documents</h2>
+              <div className="grid sm:grid-cols-2 gap-4">
+                {[
+                  { key: "resume", label: "Resume", path: app.resume_path, score: resumeScore, setScore: setResumeScore },
+                  { key: "transcript", label: "Academic Transcript", path: app.transcript_path, score: transcriptScore, setScore: setTranscriptScore },
+                  { key: "cover_letter", label: "Cover Letter", path: app.cover_letter_path, score: null, setScore: null },
+                  { key: "rec_letter", label: "Letter of Recommendation", path: app.rec_letter_path, score: null, setScore: null },
+                  { key: "financial_need", label: "Proof of Financial Need", path: app.financial_need_path, score: null, setScore: null },
+                  { key: "supporting_docs", label: "Supporting Documents", path: app.supporting_docs_path, score: null, setScore: null },
+                ].filter(d => app.required_docs?.includes(d.key)).map(({ key, label, path, score, setScore }) => (
+                  <div key={key} className="border border-gray-200 rounded-lg p-4">
+                    <p className="font-medium text-sm text-[#101661] mb-1">{label}</p>
+                    {path ? (
+                      <a href={path} target="_blank" rel="noopener noreferrer" className="text-sm text-[#b51f1f] hover:underline">
+                        View {label} →
+                      </a>
+                    ) : (
+                      <p className="text-sm text-gray-400 italic">Not uploaded</p>
+                    )}
+                    {setScore && (
+                      <div className="mt-2">
+                        <p className="text-xs font-medium text-gray-500">Score: <span className="text-[#101661]">{score ?? "Not scored"}</span></p>
+                        <ScoreButtons value={score} onChange={setScore} />
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
+          )}
 
           {/* Comments */}
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
