@@ -77,7 +77,6 @@ export async function sendStatusEmail(params: StatusEmailParams) {
 interface AlumniInviteParams {
   to: string;
   name?: string;
-  appUrl: string;
 }
 
 export async function sendAlumniInviteEmail(params: AlumniInviteParams) {
@@ -89,12 +88,10 @@ export async function sendAlumniInviteEmail(params: AlumniInviteParams) {
   const template = (await getTemplate("alumni_invite")) ?? DEFAULTS["alumni_invite"];
   const vars = { applicantName: params.name || "Alumni", opportunityName: "" };
 
-  const body = applyVars(template.body, vars) + (params.appUrl ? `\n\n${params.appUrl}` : "");
-
   await makeTransporter().sendMail({
     from: `"Philip Jaisohn Memorial Foundation" <${process.env.SMTP_USER}>`,
     to: params.to,
     subject: applyVars(template.subject, vars),
-    text: body,
+    text: applyVars(template.body, vars),
   });
 }

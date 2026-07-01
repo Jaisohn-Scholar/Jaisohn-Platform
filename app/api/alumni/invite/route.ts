@@ -20,8 +20,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Email not configured" }, { status: 500 });
   }
 
-  const appUrl = process.env.NEXTAUTH_URL || "";
-  await sendAlumniInviteEmail({ to: email, name, appUrl });
+  await sendAlumniInviteEmail({ to: email, name });
 
   return NextResponse.json({ success: true });
 }
