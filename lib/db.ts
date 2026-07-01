@@ -108,6 +108,44 @@ export async function initDb() {
   await sql`ALTER TABLE alumni ADD COLUMN IF NOT EXISTS published BOOLEAN DEFAULT false`;
   await sql`ALTER TABLE alumni ADD COLUMN IF NOT EXISTS user_id TEXT`;
   await sql`
+    CREATE TABLE IF NOT EXISTS email_templates (
+      key TEXT PRIMARY KEY,
+      subject TEXT NOT NULL,
+      body TEXT NOT NULL,
+      updated_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
+  // Seed default templates if they don't exist
+  await sql`
+    INSERT INTO email_templates (key, subject, body) VALUES
+    ('accepted',
+     'Congratulations — You''ve Been Accepted!',
+     E'Dear [applicant name],\n\nWe are thrilled to inform you that you have been accepted for the [opportunity name]!\n\nCongratulations on this achievement. A member of our team will be in touch shortly with next steps and any additional information you may need.\n\nWith warmest congratulations,\nThe Philip Jaisohn Memorial Foundation')
+    ON CONFLICT (key) DO NOTHING
+  `;
+  await sql`
+    INSERT INTO email_templates (key, subject, body) VALUES
+    ('rejected',
+     'Update on Your Application',
+     E'Dear [applicant name],\n\nThank you for your interest in the [opportunity name] and for taking the time to submit your application.\n\nAfter careful review, we regret to inform you that we are unable to move forward with your application at this time. This was a competitive process and we encourage you to apply again in the future.\n\nWe appreciate your dedication and wish you all the best in your academic and professional journey.\n\nSincerely,\nThe Philip Jaisohn Memorial Foundation')
+    ON CONFLICT (key) DO NOTHING
+  `;
+  await sql`
+    INSERT INTO email_templates (key, subject, body) VALUES
+    ('interview_requested',
+     'Interview Request — Next Steps',
+     E'Dear [applicant name],\n\nThank you for applying to the [opportunity name]. We have reviewed your application and would like to invite you to an interview as the next step in our selection process.\n\nPlease reply to this email to schedule a convenient time.\n\nWe look forward to speaking with you!\n\nBest regards,\nThe Philip Jaisohn Memorial Foundation')
+    ON CONFLICT (key) DO NOTHING
+  `;
+  await sql`
+    INSERT INTO email_templates (key, subject, body) VALUES
+    ('alumni_invite',
+     'Alumni Spotlight Invitation — Philip Jaisohn Memorial Foundation',
+     E'Dear [applicant name],\n\nYou are receiving this email because the Philip Jaisohn Memorial Foundation would like to feature you in our Alumni Spotlight.\n\nWe would love to share your story and accomplishments with our community. Please create an account on our platform (or log in if you already have one), then visit your Profile page to submit your alumni information.\n\nYour profile will be reviewed by our team before being published.\n\nThank you for being part of the Philip Jaisohn family!\n\nBest regards,\nThe Philip Jaisohn Memorial Foundation')
+    ON CONFLICT (key) DO NOTHING
+  `;
+
+  await sql`
     CREATE TABLE IF NOT EXISTS application_comments (
       id TEXT PRIMARY KEY,
       application_id TEXT NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
