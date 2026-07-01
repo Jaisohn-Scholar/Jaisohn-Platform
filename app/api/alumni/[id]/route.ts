@@ -11,7 +11,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (user.role !== "reviewer") return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   await ensureDb();
-  const { name, type, opportunityName, university, major, year, project, quote, display_order } = await req.json();
+  const { name, type, opportunityName, university, major, year, project, quote, display_order, published } = await req.json();
   await sql`
     UPDATE alumni SET
       name = COALESCE(${name ?? null}, name),
@@ -22,7 +22,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       year = ${year ?? null},
       project = ${project ?? null},
       quote = ${quote ?? null},
-      display_order = COALESCE(${display_order ?? null}, display_order)
+      display_order = COALESCE(${display_order ?? null}, display_order),
+      published = COALESCE(${published ?? null}, published)
     WHERE id = ${id}
   `;
   const result = await sql`SELECT * FROM alumni WHERE id = ${id}`;

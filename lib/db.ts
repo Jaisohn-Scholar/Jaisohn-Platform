@@ -100,9 +100,13 @@ export async function initDb() {
       project TEXT,
       quote TEXT,
       display_order INTEGER DEFAULT 0,
+      published BOOLEAN DEFAULT false,
+      user_id TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  await sql`ALTER TABLE alumni ADD COLUMN IF NOT EXISTS published BOOLEAN DEFAULT false`;
+  await sql`ALTER TABLE alumni ADD COLUMN IF NOT EXISTS user_id TEXT`;
   await sql`
     CREATE TABLE IF NOT EXISTS application_comments (
       id TEXT PRIMARY KEY,

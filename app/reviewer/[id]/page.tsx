@@ -297,7 +297,7 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
                   <div key={key} className="border border-gray-200 rounded-lg p-4">
                     <p className="font-medium text-sm text-[#101661] mb-1">{label}</p>
                     {path ? (
-                      <a href={path} target="_blank" rel="noopener noreferrer" className="text-sm text-[#b51f1f] hover:underline">
+                      <a href={`/api/applications/${app.id}/docs/${key}`} target="_blank" rel="noopener noreferrer" className="text-sm text-[#b51f1f] hover:underline">
                         View {label} →
                       </a>
                     ) : (
