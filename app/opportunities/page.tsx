@@ -70,7 +70,7 @@ export default function OpportunitiesPage() {
       {/* Hero */}
       <section className="bg-[#101661] text-white py-20 px-8 sm:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
-          <p className="text-red-300 font-semibold text-sm uppercase tracking-widest mb-3">Opportunities</p>
+          <p className="text-red-300 font-semibold text-sm uppercase tracking-widest mb-3">Opp</p>
           <h1 className="text-5xl sm:text-6xl font-bold text-white mb-5 leading-tight">Scholarships &amp;<br />Internships</h1>
           <p className="text-blue-200 text-lg mb-8 max-w-2xl leading-relaxed">
             The Philip Jaisohn Memorial Foundation is committed to supporting students who demonstrate academic excellence and a commitment to community.
