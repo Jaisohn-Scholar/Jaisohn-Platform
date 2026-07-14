@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/styles/globals.css";
 import { Providers } from "@/components/Providers";
+import { rootLayoutStyles } from "@/styles";
 
 export const metadata: Metadata = {
   title: "Jaisohn Scholarship Platform",
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full">
-      <body className="min-h-full flex flex-col bg-white text-gray-900">
+    <html lang="en" className={rootLayoutStyles.html}>
+      <body className={rootLayoutStyles.body}>
         <Providers>{children}</Providers>
       </body>
     </html>

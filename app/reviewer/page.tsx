@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 
+import { reviewerDashboardPageStyles } from "@/styles/pages/reviewer-dashboard";
 interface Application {
   id: string;
   user_name: string;
@@ -82,45 +83,45 @@ export default function ReviewerPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className={reviewerDashboardPageStyles.flex01}>
         <Navbar />
-        <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
+        <div className={reviewerDashboardPageStyles.flextext02}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className={reviewerDashboardPageStyles.flex03}>
       <Navbar />
-      <div className="max-w-6xl mx-auto w-full px-6 py-10 flex-1">
-        <div className="mb-6">
-          <div className="flex items-center justify-between">
+      <div className={reviewerDashboardPageStyles.className04}>
+        <div className={reviewerDashboardPageStyles.className05}>
+          <div className={reviewerDashboardPageStyles.flex06}>
             <div>
-              <h1 className="text-3xl font-bold text-[#101661]">Reviewer Portal</h1>
-              <p className="text-gray-500 mt-1">Review and manage all scholarship and internship applications.</p>
+              <h1 className={reviewerDashboardPageStyles.text07}>Reviewer Portal</h1>
+              <p className={reviewerDashboardPageStyles.text08}>Review and manage all scholarship and internship applications.</p>
             </div>
-            <div className="flex gap-3 flex-wrap justify-end">
+            <div className={reviewerDashboardPageStyles.flex09}>
               <Link
                 href="/reviewer/accounts"
-                className="border border-gray-300 text-gray-700 hover:border-[#101661] hover:text-[#101661] font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+                className={reviewerDashboardPageStyles.text10}
               >
                 Manage Reviewers
               </Link>
               <Link
                 href="/reviewer/email-templates"
-                className="border border-gray-300 text-gray-700 hover:border-[#101661] hover:text-[#101661] font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+                className={reviewerDashboardPageStyles.text10}
               >
                 Email Templates
               </Link>
               <Link
                 href="/reviewer/opportunities"
-                className="border border-[#101661] text-[#101661] hover:bg-[#101661] hover:text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+                className={reviewerDashboardPageStyles.text11}
               >
                 Manage Opportunities
               </Link>
               <Link
                 href="/reviewer/alumni"
-                className="bg-[#101661] hover:bg-blue-900 text-white font-semibold px-5 py-2.5 rounded-md transition-colors text-sm"
+                className={reviewerDashboardPageStyles.text12}
               >
                 Manage Alumni
               </Link>
@@ -129,26 +130,26 @@ export default function ReviewerPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div className={reviewerDashboardPageStyles.grid13}>
           {[
             { label: "Total", count: applications.length, color: "text-[#101661]" },
             { label: "Submitted", count: applications.filter((a) => a.status === "submitted").length, color: "text-blue-600" },
             { label: "Under Review", count: applications.filter((a) => a.status === "under_review").length, color: "text-purple-600" },
             { label: "Accepted", count: applications.filter((a) => a.status === "accepted").length, color: "text-green-600" },
           ].map((stat) => (
-            <div key={stat.label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 text-center">
-              <p className={`text-2xl font-bold ${stat.color}`}>{stat.count}</p>
-              <p className="text-xs text-gray-500 mt-1">{stat.label}</p>
+            <div key={stat.label} className={reviewerDashboardPageStyles.whitetext14}>
+              <p className={`${reviewerDashboardPageStyles.statCount} ${stat.color}`}>{stat.count}</p>
+              <p className={reviewerDashboardPageStyles.text15}>{stat.label}</p>
             </div>
           ))}
         </div>
 
         {/* Filters & View toggle */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-6 flex flex-wrap gap-3 items-center">
+        <div className={reviewerDashboardPageStyles.flexwhite16}>
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="text-sm border border-gray-200 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#101661]"
+            className={reviewerDashboardPageStyles.text17}
           >
             <option value="all">All Types</option>
             <option value="scholarship">Scholarship</option>
@@ -157,7 +158,7 @@ export default function ReviewerPage() {
           <select
             value={filterStatus}
             onChange={(e) => setFilterStatus(e.target.value)}
-            className="text-sm border border-gray-200 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#101661]"
+            className={reviewerDashboardPageStyles.text17}
           >
             <option value="all">All Statuses</option>
             {ALL_STATUSES.map((s) => (
@@ -167,56 +168,56 @@ export default function ReviewerPage() {
           <select
             value={filterOpp}
             onChange={(e) => setFilterOpp(e.target.value)}
-            className="text-sm border border-gray-200 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#101661]"
+            className={reviewerDashboardPageStyles.text17}
           >
             <option value="all">All Opportunities</option>
             {opportunities.map((o) => (
               <option key={o.id} value={o.id}>{o.name}</option>
             ))}
           </select>
-          <div className="ml-auto flex rounded-md border border-gray-200 overflow-hidden">
+          <div className={reviewerDashboardPageStyles.flex18}>
             <button
-              className={`px-3 py-1.5 text-sm ${view === "list" ? "bg-[#101661] text-white" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`${reviewerDashboardPageStyles.viewToggleButton} ${view === "list" ? reviewerDashboardPageStyles.viewToggleButtonActive : reviewerDashboardPageStyles.viewToggleButtonInactive}`}
               onClick={() => setView("list")}
             >
               List
             </button>
             <button
-              className={`px-3 py-1.5 text-sm ${view === "grouped" ? "bg-[#101661] text-white" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`${reviewerDashboardPageStyles.viewToggleButton} ${view === "grouped" ? reviewerDashboardPageStyles.viewToggleButtonActive : reviewerDashboardPageStyles.viewToggleButtonInactive}`}
               onClick={() => setView("grouped")}
             >
               Grouped
             </button>
           </div>
-          <span className="text-sm text-gray-400">{filtered.length} application{filtered.length !== 1 ? "s" : ""}</span>
+          <span className={reviewerDashboardPageStyles.text19}>{filtered.length} application{filtered.length !== 1 ? "s" : ""}</span>
         </div>
 
         {view === "list" ? (
-          <div className="space-y-3">
+          <div className={reviewerDashboardPageStyles.className20}>
             {filtered.length === 0 ? (
-              <div className="bg-white rounded-xl border border-gray-200 p-10 text-center text-gray-400">No applications match your filters.</div>
+              <div className={reviewerDashboardPageStyles.whitetext21}>No applications match your filters.</div>
             ) : (
               filtered.map((app) => <AppRow key={app.id} app={app} />)
             )}
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className={reviewerDashboardPageStyles.className22}>
             {grouped.map(({ opp, apps, acceptedCount }) => (
               <div key={opp.id}>
-                <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-lg font-bold text-[#101661]">{opp.name}</h2>
-                  <div className="flex items-center gap-2 text-sm text-gray-500">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${opp.type === "scholarship" ? "bg-blue-50 text-[#101661] border border-blue-200" : "bg-purple-50 text-purple-800 border border-purple-200"}`}>
+                <div className={reviewerDashboardPageStyles.flex23}>
+                  <h2 className={reviewerDashboardPageStyles.text24}>{opp.name}</h2>
+                  <div className={reviewerDashboardPageStyles.flextext25}>
+                    <span className={`${reviewerDashboardPageStyles.groupTypeBadge} ${opp.type === "scholarship" ? reviewerDashboardPageStyles.scholarshipBadge : reviewerDashboardPageStyles.internshipBadge}`}>
                       {opp.type}
                     </span>
-                    <span className="bg-gray-100 border border-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs">
+                    <span className={reviewerDashboardPageStyles.text26}>
                       {acceptedCount}/{opp.slots} spots filled
                     </span>
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div className={reviewerDashboardPageStyles.className27}>
                   {apps.length === 0 ? (
-                    <div className="bg-white rounded-xl border border-gray-200 p-5 text-center text-gray-400 text-sm">No applications</div>
+                    <div className={reviewerDashboardPageStyles.whitetext28}>No applications</div>
                   ) : (
                     apps.map((app) => <AppRow key={app.id} app={app} />)
                   )}
@@ -235,27 +236,27 @@ function AppRow({ app }: { app: Application }) {
   return (
     <Link
       href={`/reviewer/${app.id}`}
-      className="block bg-white rounded-xl border border-gray-200 shadow-sm p-4 hover:border-[#101661] hover:shadow-md transition-all"
+      className={reviewerDashboardPageStyles.white29}
     >
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-2 mb-1">
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${app.opportunity_type === "scholarship" ? "bg-blue-50 text-[#101661] border-blue-200" : "bg-purple-50 text-purple-800 border-purple-200"}`}>
+      <div className={reviewerDashboardPageStyles.flex30}>
+        <div className={reviewerDashboardPageStyles.className31}>
+          <div className={reviewerDashboardPageStyles.flex32}>
+            <span className={`${reviewerDashboardPageStyles.applicationBadge} ${app.opportunity_type === "scholarship" ? reviewerDashboardPageStyles.scholarshipBadgeCompact : reviewerDashboardPageStyles.internshipBadgeCompact}`}>
               {app.opportunity_type === "scholarship" ? "🎓 Scholarship" : "💼 Internship"}
             </span>
-            <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${statusInfo.color}`}>
+            <span className={`${reviewerDashboardPageStyles.applicationBadge} ${statusInfo.color}`}>
               {statusInfo.label}
             </span>
             {app.score !== null && (
-              <span className="text-xs bg-yellow-50 text-yellow-800 border border-yellow-200 px-2 py-0.5 rounded-full">
+              <span className={reviewerDashboardPageStyles.text33}>
                 Score: {app.score}/10
               </span>
             )}
           </div>
-          <p className="font-semibold text-[#101661]">{app.user_name}</p>
-          <p className="text-gray-500 text-sm">{app.user_email} · {app.opportunity_name}</p>
+          <p className={reviewerDashboardPageStyles.text34}>{app.user_name}</p>
+          <p className={reviewerDashboardPageStyles.text35}>{app.user_email} · {app.opportunity_name}</p>
         </div>
-        <div className="text-xs text-gray-400 shrink-0">
+        <div className={reviewerDashboardPageStyles.text36}>
           {app.submitted_at
             ? `Submitted ${new Date(app.submitted_at).toLocaleDateString()}`
             : `Started ${new Date(app.created_at).toLocaleDateString()}`}

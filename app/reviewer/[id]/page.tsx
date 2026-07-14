@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 
+import { reviewerApplicationPageStyles } from "@/styles/pages/reviewer-application";
 interface Application {
   id: string;
   user_name: string;
@@ -59,17 +60,13 @@ const STATUSES = [
 
 function ScoreButtons({ value, onChange, disabled }: { value: number | null; onChange: (v: number) => void; disabled?: boolean }) {
   return (
-    <div className="flex flex-wrap gap-1 mt-2">
+    <div className={reviewerApplicationPageStyles.flex01}>
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
         <button
           key={n}
           disabled={disabled}
           onClick={() => onChange(n)}
-          className={`w-8 h-8 rounded-md text-sm font-medium transition-colors ${
-            value === n
-              ? "bg-[#101661] text-white"
-              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={`${reviewerApplicationPageStyles.scoreButton} ${value === n ? reviewerApplicationPageStyles.scoreButtonActive : reviewerApplicationPageStyles.scoreButtonInactive}`}
         >
           {n}
         </button>
@@ -177,42 +174,42 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
 
   if (!app) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className={reviewerApplicationPageStyles.flex02}>
         <Navbar />
-        <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
+        <div className={reviewerApplicationPageStyles.flextext03}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className={reviewerApplicationPageStyles.flex04}>
       <Navbar />
-      <div className="max-w-4xl mx-auto w-full px-6 py-10 flex-1">
+      <div className={reviewerApplicationPageStyles.className05}>
         {/* Header */}
-        <div className="mb-6">
-          <Link href="/reviewer" className="text-sm text-[#101661] hover:underline">← Back to All Applications</Link>
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between mt-3 gap-4">
+        <div className={reviewerApplicationPageStyles.className06}>
+          <Link href="/reviewer" className={reviewerApplicationPageStyles.text07}>← Back to All Applications</Link>
+          <div className={reviewerApplicationPageStyles.flex08}>
             <div>
-              <h1 className="text-2xl font-bold text-[#101661]">{app.user_name}</h1>
-              <p className="text-gray-500">{app.user_email}</p>
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <span className={`text-xs font-medium px-2.5 py-1 rounded-full border ${app.opportunity_type === "scholarship" ? "bg-blue-50 text-[#101661] border-blue-200" : "bg-purple-50 text-purple-800 border-purple-200"}`}>
+              <h1 className={reviewerApplicationPageStyles.text09}>{app.user_name}</h1>
+              <p className={reviewerApplicationPageStyles.text10}>{app.user_email}</p>
+              <div className={reviewerApplicationPageStyles.flex11}>
+                <span className={`${reviewerApplicationPageStyles.typeBadge} ${app.opportunity_type === "scholarship" ? reviewerApplicationPageStyles.scholarshipBadge : reviewerApplicationPageStyles.internshipBadge}`}>
                   {app.opportunity_type === "scholarship" ? "🎓 Scholarship" : "💼 Internship"}
                 </span>
-                <span className="text-sm text-gray-600 font-medium">{app.opportunity_name}</span>
+                <span className={reviewerApplicationPageStyles.text12}>{app.opportunity_name}</span>
               </div>
               {app.submitted_at && (
-                <p className="text-xs text-gray-400 mt-1">Submitted {new Date(app.submitted_at).toLocaleDateString()}</p>
+                <p className={reviewerApplicationPageStyles.text13}>Submitted {new Date(app.submitted_at).toLocaleDateString()}</p>
               )}
             </div>
 
             {/* Status changer */}
-            <div className="shrink-0">
-              <p className="text-xs font-medium text-gray-500 mb-1">Application Status</p>
+            <div className={reviewerApplicationPageStyles.className14}>
+              <p className={reviewerApplicationPageStyles.text15}>Application Status</p>
               <select
                 value={app.status}
                 onChange={(e) => updateStatus(e.target.value)}
-                className="border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661] font-medium"
+                className={reviewerApplicationPageStyles.text16}
               >
                 {STATUSES.map((s) => (
                   <option key={s.value} value={s.value}>{s.label}</option>
@@ -222,40 +219,40 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className={reviewerApplicationPageStyles.className17}>
           {/* Personal Information */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h2 className="font-semibold text-[#101661] mb-4">Applicant Information</h2>
-            <div className="grid grid-cols-2 gap-4">
+          <div className={reviewerApplicationPageStyles.white18}>
+            <h2 className={reviewerApplicationPageStyles.text19}>Applicant Information</h2>
+            <div className={reviewerApplicationPageStyles.grid20}>
               {app.required_fields?.includes("name") && (
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">Full Name</p>
-                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.user_name || "—"}</p>
+                  <p className={reviewerApplicationPageStyles.text15}>Full Name</p>
+                  <p className={reviewerApplicationPageStyles.text21}>{app.user_name || "—"}</p>
                 </div>
               )}
               {app.required_fields?.includes("email") && (
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">Email Address</p>
-                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.user_email || "—"}</p>
+                  <p className={reviewerApplicationPageStyles.text15}>Email Address</p>
+                  <p className={reviewerApplicationPageStyles.text21}>{app.user_email || "—"}</p>
                 </div>
               )}
               {app.required_fields?.includes("school") && (
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">School / University</p>
-                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.applicant_school || <span className="text-gray-400 italic">Not provided</span>}</p>
+                  <p className={reviewerApplicationPageStyles.text15}>School / University</p>
+                  <p className={reviewerApplicationPageStyles.text21}>{app.applicant_school || <span className={reviewerApplicationPageStyles.text22}>Not provided</span>}</p>
                 </div>
               )}
               {app.required_fields?.includes("year") && (
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">Year / Grade Level</p>
-                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.applicant_year || <span className="text-gray-400 italic">Not provided</span>}</p>
+                  <p className={reviewerApplicationPageStyles.text15}>Year / Grade Level</p>
+                  <p className={reviewerApplicationPageStyles.text21}>{app.applicant_year || <span className={reviewerApplicationPageStyles.text22}>Not provided</span>}</p>
                 </div>
               )}
               {app.required_fields?.includes("birthday") && (
                 <div>
-                  <p className="text-xs font-medium text-gray-500 mb-1">Date of Birth</p>
-                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">
-                    {app.applicant_birthday ? new Date(app.applicant_birthday).toLocaleDateString() : <span className="text-gray-400 italic">Not provided</span>}
+                  <p className={reviewerApplicationPageStyles.text15}>Date of Birth</p>
+                  <p className={reviewerApplicationPageStyles.text21}>
+                    {app.applicant_birthday ? new Date(app.applicant_birthday).toLocaleDateString() : <span className={reviewerApplicationPageStyles.text22}>Not provided</span>}
                   </p>
                 </div>
               )}
@@ -268,14 +265,14 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
             { label: "Essay 2", text: app.essay2, score: essay2Score, setScore: setEssay2Score, prompt: app.essay2_prompt },
             { label: "Essay 3", text: app.essay3, score: essay3Score, setScore: setEssay3Score, prompt: app.essay3_prompt },
           ].filter(e => !!e.prompt).map(({ label, text, score, setScore, prompt }) => (
-            <div key={label} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-              <h2 className="font-semibold text-[#101661] mb-0.5">{label}</h2>
-              <p className="text-xs text-gray-400 mb-3 italic">{prompt}</p>
-              <div className="bg-gray-50 rounded-md p-4 text-sm text-gray-700 min-h-[80px] whitespace-pre-wrap leading-relaxed">
-                {text || <span className="text-gray-400 italic">No response provided.</span>}
+            <div key={label} className={reviewerApplicationPageStyles.white18}>
+              <h2 className={reviewerApplicationPageStyles.text23}>{label}</h2>
+              <p className={reviewerApplicationPageStyles.text24}>{prompt}</p>
+              <div className={reviewerApplicationPageStyles.text25}>
+                {text || <span className={reviewerApplicationPageStyles.text22}>No response provided.</span>}
               </div>
-              <div className="mt-3">
-                <p className="text-xs font-medium text-gray-500">Score (1–10): <span className="text-[#101661]">{score ?? "Not scored"}</span></p>
+              <div className={reviewerApplicationPageStyles.className26}>
+                <p className={reviewerApplicationPageStyles.text27}>Score (1–10): <span className={reviewerApplicationPageStyles.text28}>{score ?? "Not scored"}</span></p>
                 <ScoreButtons value={score} onChange={setScore} />
               </div>
             </div>
@@ -283,9 +280,9 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
 
           {/* Documents */}
           {(app.required_docs?.length ?? 0) > 0 && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-              <h2 className="font-semibold text-[#101661] mb-4">Submitted Documents</h2>
-              <div className="grid sm:grid-cols-2 gap-4">
+            <div className={reviewerApplicationPageStyles.white18}>
+              <h2 className={reviewerApplicationPageStyles.text19}>Submitted Documents</h2>
+              <div className={reviewerApplicationPageStyles.grid29}>
                 {[
                   { key: "resume", label: "Resume", path: app.resume_path, score: resumeScore, setScore: setResumeScore },
                   { key: "transcript", label: "Academic Transcript", path: app.transcript_path, score: transcriptScore, setScore: setTranscriptScore },
@@ -294,18 +291,18 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
                   { key: "financial_need", label: "Proof of Financial Need", path: app.financial_need_path, score: null, setScore: null },
                   { key: "supporting_docs", label: "Supporting Documents", path: app.supporting_docs_path, score: null, setScore: null },
                 ].filter(d => app.required_docs?.includes(d.key)).map(({ key, label, path, score, setScore }) => (
-                  <div key={key} className="border border-gray-200 rounded-lg p-4">
-                    <p className="font-medium text-sm text-[#101661] mb-1">{label}</p>
+                  <div key={key} className={reviewerApplicationPageStyles.className30}>
+                    <p className={reviewerApplicationPageStyles.text31}>{label}</p>
                     {path ? (
-                      <a href={`/api/applications/${app.id}/docs/${key}`} target="_blank" rel="noopener noreferrer" className="text-sm text-[#b51f1f] hover:underline">
+                      <a href={`/api/applications/${app.id}/docs/${key}`} target="_blank" rel="noopener noreferrer" className={reviewerApplicationPageStyles.text32}>
                         View {label} →
                       </a>
                     ) : (
-                      <p className="text-sm text-gray-400 italic">Not uploaded</p>
+                      <p className={reviewerApplicationPageStyles.text33}>Not uploaded</p>
                     )}
                     {setScore && (
-                      <div className="mt-2">
-                        <p className="text-xs font-medium text-gray-500">Score: <span className="text-[#101661]">{score ?? "Not scored"}</span></p>
+                      <div className={reviewerApplicationPageStyles.className34}>
+                        <p className={reviewerApplicationPageStyles.text27}>Score: <span className={reviewerApplicationPageStyles.text28}>{score ?? "Not scored"}</span></p>
                         <ScoreButtons value={score} onChange={setScore} />
                       </div>
                     )}
@@ -316,55 +313,55 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
           )}
 
           {/* Comments */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h2 className="font-semibold text-[#101661] mb-4">Reviewer Comments</h2>
+          <div className={reviewerApplicationPageStyles.white18}>
+            <h2 className={reviewerApplicationPageStyles.text19}>Reviewer Comments</h2>
             {comments.length === 0 ? (
-              <p className="text-sm text-gray-400 italic mb-4">No comments yet. Be the first to leave a note.</p>
+              <p className={reviewerApplicationPageStyles.text35}>No comments yet. Be the first to leave a note.</p>
             ) : (
-              <div className="space-y-3 mb-4">
+              <div className={reviewerApplicationPageStyles.className36}>
                 {comments.map(c => (
-                  <div key={c.id} className="flex gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#101661] flex items-center justify-center text-xs font-bold text-white shrink-0">
+                  <div key={c.id} className={reviewerApplicationPageStyles.flex37}>
+                    <div className={reviewerApplicationPageStyles.flextext38}>
                       {c.reviewer_name?.[0]?.toUpperCase() || "R"}
                     </div>
-                    <div className="flex-1 bg-gray-50 rounded-lg p-3">
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs font-semibold text-[#101661]">{c.reviewer_name}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-gray-400">{new Date(c.created_at).toLocaleString()}</span>
+                    <div className={reviewerApplicationPageStyles.className39}>
+                      <div className={reviewerApplicationPageStyles.flex40}>
+                        <span className={reviewerApplicationPageStyles.text41}>{c.reviewer_name}</span>
+                        <div className={reviewerApplicationPageStyles.flex42}>
+                          <span className={reviewerApplicationPageStyles.text43}>{new Date(c.created_at).toLocaleString()}</span>
                           {c.reviewer_id === (session?.user as any)?.id && (
-                            <button onClick={() => deleteComment(c.id)} className="text-xs text-red-400 hover:text-red-600 transition-colors">Delete</button>
+                            <button onClick={() => deleteComment(c.id)} className={reviewerApplicationPageStyles.text44}>Delete</button>
                           )}
                         </div>
                       </div>
-                      <p className="text-sm text-gray-700 whitespace-pre-wrap">{c.comment}</p>
+                      <p className={reviewerApplicationPageStyles.text45}>{c.comment}</p>
                     </div>
                   </div>
                 ))}
               </div>
             )}
-            <form onSubmit={postComment} className="flex gap-2">
+            <form onSubmit={postComment} className={reviewerApplicationPageStyles.flex46}>
               <input
                 value={newComment}
                 onChange={e => setNewComment(e.target.value)}
                 placeholder="Add a comment..."
-                className="flex-1 border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                className={reviewerApplicationPageStyles.text47}
               />
               <button type="submit" disabled={postingComment || !newComment.trim()}
-                className="bg-[#101661] hover:bg-blue-900 disabled:opacity-40 text-white font-medium px-4 py-2 rounded-md text-sm transition-colors">
+                className={reviewerApplicationPageStyles.text48}>
                 {postingComment ? "Posting..." : "Post"}
               </button>
             </form>
           </div>
 
           {/* Actions */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h2 className="font-semibold text-[#101661] mb-4">Actions</h2>
-            <div className="flex flex-wrap gap-3">
+          <div className={reviewerApplicationPageStyles.white18}>
+            <h2 className={reviewerApplicationPageStyles.text19}>Actions</h2>
+            <div className={reviewerApplicationPageStyles.flex49}>
               <button
                 onClick={saveReview}
                 disabled={saving}
-                className="bg-[#101661] hover:bg-blue-900 disabled:bg-gray-400 text-white font-medium px-5 py-2.5 rounded-md transition-colors"
+                className={reviewerApplicationPageStyles.text50}
               >
                 {saving ? "Saving..." : saved ? "✓ Saved" : "Save Review"}
               </button>
@@ -372,7 +369,7 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
                 onClick={() => {
                   if (confirm("Reject this application? The student will be notified by email.")) decide("rejected");
                 }}
-                className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "rejected" ? "bg-red-700 text-white ring-2 ring-red-300" : "bg-[#b51f1f] hover:bg-red-700 text-white"}`}
+                className={`${reviewerApplicationPageStyles.decisionButton} ${app.status === "rejected" ? reviewerApplicationPageStyles.rejectButtonActive : reviewerApplicationPageStyles.rejectButtonInactive}`}
               >
                 {app.status === "rejected" ? "✓ Rejected" : "Reject"}
               </button>
@@ -380,7 +377,7 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
                 onClick={() => {
                   if (confirm("Request an interview? The student will be notified by email.")) decide("interview_requested");
                 }}
-                className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "interview_requested" ? "bg-orange-600 text-white ring-2 ring-orange-300" : "bg-orange-500 hover:bg-orange-600 text-white"}`}
+                className={`${reviewerApplicationPageStyles.decisionButton} ${app.status === "interview_requested" ? reviewerApplicationPageStyles.interviewButtonActive : reviewerApplicationPageStyles.interviewButtonInactive}`}
               >
                 {app.status === "interview_requested" ? "✓ Interview Requested" : "Request Interview"}
               </button>
@@ -388,7 +385,7 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
                 onClick={() => {
                   if (confirm("Accept this application? The student will be notified by email.")) decide("accepted");
                 }}
-                className={`px-5 py-2.5 rounded-md text-sm font-medium transition-colors ${app.status === "accepted" ? "bg-green-700 text-white ring-2 ring-green-300" : "bg-green-600 hover:bg-green-700 text-white"}`}
+                className={`${reviewerApplicationPageStyles.decisionButton} ${app.status === "accepted" ? reviewerApplicationPageStyles.acceptButtonActive : reviewerApplicationPageStyles.acceptButtonInactive}`}
               >
                 {app.status === "accepted" ? "✓ Accepted" : "Accept"}
               </button>
@@ -399,7 +396,7 @@ export default function ReviewApplicationPage({ params }: { params: Promise<{ id
                     router.push("/reviewer");
                   }
                 }}
-                className="px-5 py-2.5 rounded-md text-sm font-medium bg-gray-100 hover:bg-gray-200 text-gray-600 transition-colors ml-auto"
+                className={reviewerApplicationPageStyles.text51}
               >
                 Delete Application
               </button>

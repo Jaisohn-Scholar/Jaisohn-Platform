@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 
+import { reviewerAlumniPageStyles } from "@/styles/pages/reviewer-alumni";
 interface Alumni {
   id: string;
   name: string;
@@ -33,7 +34,7 @@ const EMPTY_FORM = {
 
 export default function ReviewerAlumniPage() {
   return (
-    <Suspense fallback={<div className="flex flex-col min-h-screen"><Navbar /><div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div></div>}>
+    <Suspense fallback={<div className={reviewerAlumniPageStyles.flex01}><Navbar /><div className={reviewerAlumniPageStyles.flextext02}>Loading...</div></div>}>
       <ReviewerAlumniContent />
     </Suspense>
   );
@@ -183,53 +184,53 @@ function ReviewerAlumniContent() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className={reviewerAlumniPageStyles.flex01}>
         <Navbar />
-        <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
+        <div className={reviewerAlumniPageStyles.flextext02}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className={reviewerAlumniPageStyles.flex03}>
       <Navbar />
-      <div className="max-w-6xl mx-auto w-full px-6 py-10 flex-1">
-        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+      <div className={reviewerAlumniPageStyles.className04}>
+        <div className={reviewerAlumniPageStyles.flex05}>
           <div>
-            <Link href="/reviewer" className="text-sm text-gray-500 hover:text-gray-700 mb-1 inline-block">← Back to Reviewer Portal</Link>
-            <h1 className="text-3xl font-bold text-[#101661]">Manage Alumni Profiles</h1>
+            <Link href="/reviewer" className={reviewerAlumniPageStyles.text06}>← Back to Reviewer Portal</Link>
+            <h1 className={reviewerAlumniPageStyles.text07}>Manage Alumni Profiles</h1>
           </div>
-          <div className="flex gap-2 flex-wrap">
+          <div className={reviewerAlumniPageStyles.flex08}>
             <button
               onClick={() => { setShowInviteModal(true); setInviteMsg(""); }}
-              className="border border-[#101661] text-[#101661] hover:bg-[#101661] hover:text-white font-semibold px-4 py-2 rounded-md transition-colors text-sm"
+              className={reviewerAlumniPageStyles.text09}
             >
               Invite Alumni
             </button>
             <button
               onClick={openAdd}
-              className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-md transition-colors text-sm"
+              className={reviewerAlumniPageStyles.text10}
             >
               + Add New Alumni
             </button>
           </div>
         </div>
 
-        <div className="mb-5">
+        <div className={reviewerAlumniPageStyles.className11}>
           <input
             type="text"
             placeholder="Search by name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full max-w-sm border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+            className={reviewerAlumniPageStyles.text12}
           />
         </div>
 
         {/* Pending review */}
         {pending.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-gray-700 mb-3">Pending Review ({pending.length})</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={reviewerAlumniPageStyles.className13}>
+            <h2 className={reviewerAlumniPageStyles.text14}>Pending Review ({pending.length})</h2>
+            <div className={reviewerAlumniPageStyles.grid15}>
               {pending.map((alum) => (
                 <AlumCard key={alum.id} alum={alum} onEdit={openEdit} onDelete={handleDelete} onTogglePublish={togglePublish} />
               ))}
@@ -238,14 +239,14 @@ function ReviewerAlumniContent() {
         )}
 
         <div>
-          <h2 className="text-lg font-semibold text-gray-700 mb-3">Published ({published.length})</h2>
+          <h2 className={reviewerAlumniPageStyles.text14}>Published ({published.length})</h2>
           {published.length === 0 ? (
-            <div className="bg-white rounded-xl border border-gray-200 p-16 text-center text-gray-400">
-              <p className="text-5xl mb-4">🎓</p>
+            <div className={reviewerAlumniPageStyles.whitetext16}>
+              <p className={reviewerAlumniPageStyles.text17}>🎓</p>
               <p>No published alumni yet.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className={reviewerAlumniPageStyles.grid15}>
               {published.map((alum) => (
                 <AlumCard key={alum.id} alum={alum} onEdit={openEdit} onDelete={handleDelete} onTogglePublish={togglePublish} />
               ))}
@@ -256,107 +257,107 @@ function ReviewerAlumniContent() {
 
       {/* Add/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <h2 className="text-xl font-bold text-[#101661] mb-4">
+        <div className={reviewerAlumniPageStyles.fixedflex18}>
+          <div className={reviewerAlumniPageStyles.white19}>
+            <div className={reviewerAlumniPageStyles.className20}>
+              <h2 className={reviewerAlumniPageStyles.text21}>
                 {editId ? "Edit Alumni Profile" : "Add Alumni Profile"}
               </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className={reviewerAlumniPageStyles.className22}>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                  <label className={reviewerAlumniPageStyles.text23}>Name *</label>
                   <input
                     required
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                    className={reviewerAlumniPageStyles.text24}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Type *</label>
+                  <label className={reviewerAlumniPageStyles.text23}>Type *</label>
                   <select
                     value={form.type}
                     onChange={(e) => setForm({ ...form, type: e.target.value })}
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                    className={reviewerAlumniPageStyles.text24}
                   >
                     <option value="Scholar">Scholar</option>
                     <option value="Intern">Intern</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Opportunity Name *</label>
+                  <label className={reviewerAlumniPageStyles.text23}>Opportunity Name *</label>
                   <input
                     required
                     value={form.opportunityName}
                     onChange={(e) => setForm({ ...form, opportunityName: e.target.value })}
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                    className={reviewerAlumniPageStyles.text24}
                   />
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className={reviewerAlumniPageStyles.grid25}>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">University</label>
+                    <label className={reviewerAlumniPageStyles.text23}>University</label>
                     <input
                       value={form.university}
                       onChange={(e) => setForm({ ...form, university: e.target.value })}
-                      className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                      className={reviewerAlumniPageStyles.text24}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                    <label className={reviewerAlumniPageStyles.text23}>Year</label>
                     <input
                       value={form.year}
                       onChange={(e) => setForm({ ...form, year: e.target.value })}
-                      className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                      className={reviewerAlumniPageStyles.text24}
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Major</label>
+                  <label className={reviewerAlumniPageStyles.text23}>Major</label>
                   <input
                     value={form.major}
                     onChange={(e) => setForm({ ...form, major: e.target.value })}
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                    className={reviewerAlumniPageStyles.text24}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Project Description</label>
+                  <label className={reviewerAlumniPageStyles.text23}>Project Description</label>
                   <textarea
                     rows={3}
                     value={form.project}
                     onChange={(e) => setForm({ ...form, project: e.target.value })}
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                    className={reviewerAlumniPageStyles.text24}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Quote</label>
+                  <label className={reviewerAlumniPageStyles.text23}>Quote</label>
                   <textarea
                     rows={2}
                     value={form.quote}
                     onChange={(e) => setForm({ ...form, quote: e.target.value })}
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                    className={reviewerAlumniPageStyles.text24}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Photo</label>
+                  <label className={reviewerAlumniPageStyles.text23}>Photo</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
-                    className="w-full text-sm text-gray-500 file:mr-4 file:py-1.5 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-[#101661] file:text-white hover:file:bg-blue-900"
+                    className={reviewerAlumniPageStyles.text26}
                   />
                 </div>
-                <div className="flex gap-3 pt-2">
+                <div className={reviewerAlumniPageStyles.flex27}>
                   <button
                     type="button"
                     onClick={() => setShowModal(false)}
-                    className="flex-1 border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-md text-sm transition-colors"
+                    className={reviewerAlumniPageStyles.text28}
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={saving}
-                    className="flex-1 bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md text-sm transition-colors disabled:opacity-50"
+                    className={reviewerAlumniPageStyles.text29}
                   >
                     {saving ? "Saving..." : editId ? "Save Changes" : "Add Alumni"}
                   </button>
@@ -369,50 +370,50 @@ function ReviewerAlumniContent() {
 
       {/* Invite Modal */}
       {showInviteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-xl font-bold text-[#101661] mb-4">Invite Alumni</h2>
-            <p className="text-sm text-gray-500 mb-4">
+        <div className={reviewerAlumniPageStyles.fixedflex18}>
+          <div className={reviewerAlumniPageStyles.white30}>
+            <h2 className={reviewerAlumniPageStyles.text21}>Invite Alumni</h2>
+            <p className={reviewerAlumniPageStyles.text31}>
               Send an email inviting a former scholar or intern to create an account and submit their alumni profile.
             </p>
-            <form onSubmit={handleInvite} className="space-y-3">
+            <form onSubmit={handleInvite} className={reviewerAlumniPageStyles.className32}>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name (optional)</label>
+                <label className={reviewerAlumniPageStyles.text23}>Name (optional)</label>
                 <input
                   value={inviteName}
                   onChange={(e) => setInviteName(e.target.value)}
                   placeholder="Alumni's name"
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                  className={reviewerAlumniPageStyles.text24}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <label className={reviewerAlumniPageStyles.text23}>Email *</label>
                 <input
                   required
                   type="email"
                   value={inviteEmail}
                   onChange={(e) => setInviteEmail(e.target.value)}
                   placeholder="alumni@example.com"
-                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                  className={reviewerAlumniPageStyles.text24}
                 />
               </div>
               {inviteMsg && (
-                <p className={`text-sm ${inviteMsg === "Invitation sent!" ? "text-green-600" : "text-red-600"}`}>
+                <p className={`${reviewerAlumniPageStyles.inviteMessage} ${inviteMsg === "Invitation sent!" ? reviewerAlumniPageStyles.inviteMessageSuccess : reviewerAlumniPageStyles.inviteMessageError}`}>
                   {inviteMsg}
                 </p>
               )}
-              <div className="flex gap-3 pt-1">
+              <div className={reviewerAlumniPageStyles.flex33}>
                 <button
                   type="button"
                   onClick={() => setShowInviteModal(false)}
-                  className="flex-1 border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-md text-sm"
+                  className={reviewerAlumniPageStyles.text34}
                 >
                   Close
                 </button>
                 <button
                   type="submit"
                   disabled={inviteSending}
-                  className="flex-1 bg-[#101661] hover:bg-blue-900 text-white font-semibold px-4 py-2 rounded-md text-sm disabled:opacity-50"
+                  className={reviewerAlumniPageStyles.text35}
                 >
                   {inviteSending ? "Sending..." : "Send Invite"}
                 </button>
@@ -437,44 +438,40 @@ function AlumCard({
   onTogglePublish: (a: Alumni) => void;
 }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-      <div className="w-full h-40 bg-gray-200 flex items-center justify-center text-4xl relative">
+    <div className={reviewerAlumniPageStyles.white36}>
+      <div className={reviewerAlumniPageStyles.flextext37}>
         {alum.photo_path ? (
-          <img src={alum.photo_path} alt={alum.name} className="w-full h-full object-cover" />
+          <img src={alum.photo_path} alt={alum.name} className={reviewerAlumniPageStyles.className38} />
         ) : "👤"}
         {!alum.published && (
-          <span className="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-medium px-2 py-0.5 rounded-full">
+          <span className={reviewerAlumniPageStyles.text39}>
             Pending
           </span>
         )}
       </div>
-      <div className="p-4">
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="font-bold text-[#101661]">{alum.name}</h3>
-          <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">{alum.type}</span>
+      <div className={reviewerAlumniPageStyles.className40}>
+        <div className={reviewerAlumniPageStyles.flex41}>
+          <h3 className={reviewerAlumniPageStyles.text42}>{alum.name}</h3>
+          <span className={reviewerAlumniPageStyles.text43}>{alum.type}</span>
         </div>
-        <p className="text-[#b51f1f] text-sm mb-1">{alum.opportunity_name}</p>
-        {alum.university && <p className="text-gray-500 text-xs">{alum.university}</p>}
-        <div className="flex gap-2 mt-3">
+        <p className={reviewerAlumniPageStyles.text44}>{alum.opportunity_name}</p>
+        {alum.university && <p className={reviewerAlumniPageStyles.text45}>{alum.university}</p>}
+        <div className={reviewerAlumniPageStyles.flex46}>
           <button
             onClick={() => onTogglePublish(alum)}
-            className={`flex-1 text-sm px-3 py-1.5 rounded-md transition-colors font-medium border ${
-              alum.published
-                ? "border-gray-200 text-gray-600 hover:bg-gray-50"
-                : "border-green-500 text-green-700 hover:bg-green-50"
-            }`}
+            className={`${reviewerAlumniPageStyles.publishButton} ${alum.published ? reviewerAlumniPageStyles.publishButtonPublished : reviewerAlumniPageStyles.publishButtonDraft}`}
           >
             {alum.published ? "Unpublish" : "Publish"}
           </button>
           <button
             onClick={() => onEdit(alum)}
-            className="text-sm border border-[#101661] text-[#101661] hover:bg-[#101661] hover:text-white px-3 py-1.5 rounded-md transition-colors"
+            className={reviewerAlumniPageStyles.text47}
           >
             Edit
           </button>
           <button
             onClick={() => onDelete(alum.id)}
-            className="text-sm border border-red-200 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md transition-colors"
+            className={reviewerAlumniPageStyles.text48}
           >
             Delete
           </button>

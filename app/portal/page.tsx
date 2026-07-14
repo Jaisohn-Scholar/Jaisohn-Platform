@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 
+import { portalPageStyles } from "@/styles/pages/portal";
 interface Application {
   id: string;
   opportunity_name: string;
@@ -90,26 +91,26 @@ export default function PortalPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen">
+      <div className={portalPageStyles.flex01}>
         <Navbar />
-        <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
+        <div className={portalPageStyles.flextext02}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className={portalPageStyles.flex03}>
       <Navbar />
-      <div className="max-w-5xl mx-auto w-full px-6 py-10 flex-1">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+      <div className={portalPageStyles.className04}>
+        <div className={portalPageStyles.flex05}>
           <div>
-            <h1 className="text-3xl font-bold text-[#101661]">My Applications</h1>
-            <p className="text-gray-500 mt-1">Track and manage your scholarship and internship applications.</p>
+            <h1 className={portalPageStyles.text06}>My Applications</h1>
+            <p className={portalPageStyles.text07}>Track and manage your scholarship and internship applications.</p>
           </div>
           {(!hasScholarship || !hasInternship) && (
             <button
               onClick={() => { setShowNewAppModal(true); setError(""); }}
-              className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-5 py-2.5 rounded-md transition-colors whitespace-nowrap"
+              className={portalPageStyles.text08}
             >
               + New Application
             </button>
@@ -117,60 +118,60 @@ export default function PortalPage() {
         </div>
 
         {applications.length === 0 ? (
-          <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
-            <div className="text-5xl mb-4">📝</div>
-            <h2 className="text-xl font-semibold text-[#101661] mb-2">No Applications Yet</h2>
-            <p className="text-gray-500 mb-6">Start your journey by applying for a scholarship or internship.</p>
+          <div className={portalPageStyles.whitetext09}>
+            <div className={portalPageStyles.text10}>📝</div>
+            <h2 className={portalPageStyles.text11}>No Applications Yet</h2>
+            <p className={portalPageStyles.text12}>Start your journey by applying for a scholarship or internship.</p>
             <button
               onClick={() => { setShowNewAppModal(true); setError(""); }}
-              className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-6 py-2.5 rounded-md transition-colors"
+              className={portalPageStyles.text13}
             >
               Start Application
             </button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className={portalPageStyles.className14}>
             {applications.map((app) => {
               const statusInfo = STATUS_LABELS[app.status] || { label: app.status, color: "bg-gray-100 text-gray-700 border-gray-200" };
               return (
-                <div key={app.id} className="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full border ${app.opportunity_type === "scholarship" ? "bg-blue-50 text-[#101661] border-blue-200" : "bg-purple-50 text-purple-800 border-purple-200"}`}>
+                <div key={app.id} className={portalPageStyles.flexwhite15}>
+                  <div className={portalPageStyles.className16}>
+                    <div className={portalPageStyles.flex17}>
+                      <span className={`${portalPageStyles.typeBadge} ${app.opportunity_type === "scholarship" ? portalPageStyles.scholarshipBadge : portalPageStyles.internshipBadge}`}>
                         {app.opportunity_type === "scholarship" ? "🎓 Scholarship" : "💼 Internship"}
                       </span>
-                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full border ${statusInfo.color}`}>
+                      <span className={`${portalPageStyles.typeBadge} ${statusInfo.color}`}>
                         {statusInfo.label}
                       </span>
                     </div>
-                    <h2 className="font-semibold text-lg text-[#101661]">{app.opportunity_name}</h2>
-                    <p className="text-gray-400 text-xs mt-1">
+                    <h2 className={portalPageStyles.text18}>{app.opportunity_name}</h2>
+                    <p className={portalPageStyles.text19}>
                       Started {new Date(app.created_at).toLocaleDateString()}
                       {app.submitted_at && ` · Submitted ${new Date(app.submitted_at).toLocaleDateString()}`}
                     </p>
                     {app.status === "interview_requested" && (
-                      <p className="text-orange-700 text-sm mt-2 bg-orange-50 border border-orange-200 rounded-md px-3 py-1.5">
+                      <p className={portalPageStyles.text20}>
                         🎉 Interview requested! The team will email you soon to set up a meeting.
                       </p>
                     )}
                     {app.status === "accepted" && (
-                      <p className="text-green-700 text-sm mt-2 bg-green-50 border border-green-200 rounded-md px-3 py-1.5">
+                      <p className={portalPageStyles.text21}>
                         🎉 Congratulations! You have been accepted.
                       </p>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  <div className={portalPageStyles.flex22}>
                     {(app.status === "in_progress" || app.status === "submitted") && (
                       <Link
                         href={`/portal/apply/${app.id}`}
-                        className="bg-[#101661] hover:bg-blue-900 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
+                        className={portalPageStyles.text23}
                       >
                         {app.status === "in_progress" ? "Edit" : "View"}
                       </Link>
                     )}
                     <button
                       onClick={() => setDeleteConfirm(app.id)}
-                      className="text-red-500 hover:text-red-700 text-sm font-medium px-3 py-2 rounded-md hover:bg-red-50 transition-colors"
+                      className={portalPageStyles.text24}
                     >
                       Delete
                     </button>
@@ -184,19 +185,19 @@ export default function PortalPage() {
 
       {/* New Application Modal */}
       {showNewAppModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl flex flex-col max-h-[80vh]">
-            <div className="p-6 border-b border-gray-100">
-              <h2 className="text-xl font-bold text-[#101661]">Start New Application</h2>
-              <p className="text-sm text-gray-500 mt-1">Select an opportunity to begin your application.</p>
+        <div className={portalPageStyles.fixedflex25}>
+          <div className={portalPageStyles.flexwhite26}>
+            <div className={portalPageStyles.className27}>
+              <h2 className={portalPageStyles.text28}>Start New Application</h2>
+              <p className={portalPageStyles.text29}>Select an opportunity to begin your application.</p>
             </div>
             {error && (
-              <div className="mx-6 mt-4 text-red-600 text-sm bg-red-50 border border-red-200 rounded-md px-3 py-2">
+              <div className={portalPageStyles.text30}>
                 {error}
               </div>
             )}
-            <div className="overflow-y-auto flex-1 p-6">
-              <div className="grid grid-cols-2 gap-3">
+            <div className={portalPageStyles.className31}>
+              <div className={portalPageStyles.grid32}>
                 {opportunities.filter((o) => {
                   if (o.type === "scholarship" && hasScholarship) return false;
                   if (o.type === "internship" && hasInternship) return false;
@@ -205,20 +206,20 @@ export default function PortalPage() {
                   <button
                     key={opp.id}
                     onClick={() => startApplication(opp.id)}
-                    className="text-left p-4 border border-gray-200 rounded-xl hover:border-[#101661] hover:bg-blue-50 transition-colors"
+                    className={portalPageStyles.text33}
                   >
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium inline-block mb-2 ${opp.type === "scholarship" ? "bg-blue-100 text-[#101661]" : "bg-purple-100 text-purple-800"}`}>
+                    <span className={`${portalPageStyles.modalTypeBadge} ${opp.type === "scholarship" ? portalPageStyles.modalScholarshipBadge : portalPageStyles.modalInternshipBadge}`}>
                       {opp.type === "scholarship" ? "🎓 Scholarship" : "💼 Internship"}
                     </span>
-                    <p className="font-semibold text-[#101661] text-sm leading-snug">{opp.name}</p>
+                    <p className={portalPageStyles.text34}>{opp.name}</p>
                   </button>
                 ))}
               </div>
             </div>
-            <div className="p-4 border-t border-gray-100">
+            <div className={portalPageStyles.className35}>
               <button
                 onClick={() => { setShowNewAppModal(false); setError(""); }}
-                className="w-full py-2 text-gray-500 hover:text-gray-700 text-sm transition-colors"
+                className={portalPageStyles.text36}
               >
                 Cancel
               </button>
@@ -229,23 +230,23 @@ export default function PortalPage() {
 
       {/* Delete Confirmation Modal */}
       {deleteConfirm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm text-center">
-            <div className="text-4xl mb-3">⚠️</div>
-            <h2 className="text-xl font-bold text-[#101661] mb-2">Delete Application?</h2>
-            <p className="text-gray-600 text-sm mb-6">
+        <div className={portalPageStyles.fixedflex25}>
+          <div className={portalPageStyles.whitetext37}>
+            <div className={portalPageStyles.text38}>⚠️</div>
+            <h2 className={portalPageStyles.text39}>Delete Application?</h2>
+            <p className={portalPageStyles.text40}>
               This action cannot be undone. All application data including essays and uploaded documents will be permanently deleted.
             </p>
-            <div className="flex gap-3">
+            <div className={portalPageStyles.flex41}>
               <button
                 onClick={() => setDeleteConfirm(null)}
-                className="flex-1 py-2.5 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                className={portalPageStyles.text42}
               >
                 Cancel
               </button>
               <button
                 onClick={() => deleteApplication(deleteConfirm)}
-                className="flex-1 py-2.5 bg-[#b51f1f] hover:bg-red-700 text-white font-medium rounded-md transition-colors"
+                className={portalPageStyles.text43}
               >
                 Delete
               </button>

@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 
+import { reviewerEmailTemplatesPageStyles } from "@/styles/pages/reviewer-email-templates";
 type TemplateKey = "accepted" | "rejected" | "interview_requested" | "alumni_invite";
 
 interface Template {
@@ -114,43 +115,43 @@ export default function EmailTemplatesPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen"><Navbar />
-        <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
+      <div className={reviewerEmailTemplatesPageStyles.flex01}><Navbar />
+        <div className={reviewerEmailTemplatesPageStyles.flextext02}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className={reviewerEmailTemplatesPageStyles.flex03}>
       <Navbar />
-      <div className="max-w-5xl mx-auto w-full px-6 py-10 flex-1">
-        <div className="flex items-center justify-between mb-6">
+      <div className={reviewerEmailTemplatesPageStyles.className04}>
+        <div className={reviewerEmailTemplatesPageStyles.flex05}>
           <div>
-            <Link href="/reviewer" className="text-sm text-gray-500 hover:text-gray-700 mb-1 inline-block">← Back to Reviewer Portal</Link>
-            <h1 className="text-3xl font-bold text-[#101661]">Email Templates</h1>
-            <p className="text-gray-500 text-sm mt-1">Customize the automated emails sent to applicants. Use variable blocks to personalize each message.</p>
+            <Link href="/reviewer" className={reviewerEmailTemplatesPageStyles.text06}>← Back to Reviewer Portal</Link>
+            <h1 className={reviewerEmailTemplatesPageStyles.text07}>Email Templates</h1>
+            <p className={reviewerEmailTemplatesPageStyles.text08}>Customize the automated emails sent to applicants. Use variable blocks to personalize each message.</p>
           </div>
           <button
             onClick={handleSave}
             disabled={saving}
-            className="bg-[#b51f1f] hover:bg-red-700 text-white font-semibold px-6 py-2.5 rounded-md transition-colors disabled:opacity-50 text-sm"
+            className={reviewerEmailTemplatesPageStyles.text09}
           >
             {saving ? "Saving..." : saved ? "Saved ✓" : "Save All Templates"}
           </button>
         </div>
 
         {/* Variable reference */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-6">
-          <p className="text-sm font-semibold text-[#101661] mb-2">Available Variables</p>
-          <p className="text-xs text-gray-500 mb-3">Click a variable to insert it at the cursor position in the currently focused field.</p>
-          <div className="flex flex-wrap gap-2">
+        <div className={reviewerEmailTemplatesPageStyles.white10}>
+          <p className={reviewerEmailTemplatesPageStyles.text11}>Available Variables</p>
+          <p className={reviewerEmailTemplatesPageStyles.text12}>Click a variable to insert it at the cursor position in the currently focused field.</p>
+          <div className={reviewerEmailTemplatesPageStyles.flex13}>
             {VARIABLE_CHIPS.map(({ label, desc }) => (
-              <div key={label} className="flex items-center gap-2">
-                <div className="flex gap-1">
+              <div key={label} className={reviewerEmailTemplatesPageStyles.flex14}>
+                <div className={reviewerEmailTemplatesPageStyles.flex15}>
                   <button
                     type="button"
                     onClick={() => insertVariable(label, "subject")}
-                    className="font-mono text-xs bg-[#101661]/10 text-[#101661] border border-[#101661]/20 px-2 py-1 rounded hover:bg-[#101661]/20 transition-colors"
+                    className={reviewerEmailTemplatesPageStyles.text16}
                     title={`Insert into subject: ${desc}`}
                   >
                     {label} → subject
@@ -158,66 +159,62 @@ export default function EmailTemplatesPage() {
                   <button
                     type="button"
                     onClick={() => insertVariable(label, "body")}
-                    className="font-mono text-xs bg-[#101661]/10 text-[#101661] border border-[#101661]/20 px-2 py-1 rounded hover:bg-[#101661]/20 transition-colors"
+                    className={reviewerEmailTemplatesPageStyles.text16}
                     title={`Insert into body: ${desc}`}
                   >
                     {label} → body
                   </button>
                 </div>
-                <span className="text-xs text-gray-400">{desc}</span>
+                <span className={reviewerEmailTemplatesPageStyles.text17}>{desc}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <div className="grid md:grid-cols-[220px_1fr] gap-6">
+        <div className={reviewerEmailTemplatesPageStyles.grid18}>
           {/* Sidebar tabs */}
-          <div className="space-y-2">
+          <div className={reviewerEmailTemplatesPageStyles.className19}>
             {TEMPLATE_META.map((m) => (
               <button
                 key={m.key}
                 onClick={() => setActiveKey(m.key)}
-                className={`w-full text-left px-4 py-3 rounded-xl border transition-all text-sm ${
-                  activeKey === m.key
-                    ? "bg-[#101661] text-white border-[#101661] shadow-sm font-semibold"
-                    : "bg-white text-gray-700 border-gray-200 hover:border-[#101661]"
-                }`}
+                className={`${reviewerEmailTemplatesPageStyles.templateTab} ${activeKey === m.key ? reviewerEmailTemplatesPageStyles.templateTabActive : reviewerEmailTemplatesPageStyles.templateTabInactive}`}
               >
-                <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full border mb-1 ${activeKey === m.key ? "bg-white/20 text-white border-white/30" : m.color}`}>
+                <span className={`${reviewerEmailTemplatesPageStyles.templateBadge} ${activeKey === m.key ? reviewerEmailTemplatesPageStyles.templateBadgeActive : m.color}`}>
                   {m.label}
                 </span>
-                <p className={`text-xs mt-0.5 ${activeKey === m.key ? "text-blue-200" : "text-gray-400"}`}>{m.description}</p>
+                <p className={`${reviewerEmailTemplatesPageStyles.templateDescription} ${activeKey === m.key ? reviewerEmailTemplatesPageStyles.templateDescriptionActive : reviewerEmailTemplatesPageStyles.templateDescriptionInactive}`}>{m.description}</p>
               </button>
             ))}
           </div>
 
           {/* Editor */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-4">
-            <div className="flex items-center gap-2 mb-2">
-              <span className={`text-xs font-medium px-2 py-0.5 rounded-full border ${meta.color}`}>{meta.label}</span>
-              <span className="text-sm text-gray-400">{meta.description}</span>
+          <div className={reviewerEmailTemplatesPageStyles.white20}>
+            <div className={reviewerEmailTemplatesPageStyles.flex21}>
+              <span className={`${reviewerEmailTemplatesPageStyles.metaBadge} ${meta.color}`}>{meta.label}</span>
+              <span className={reviewerEmailTemplatesPageStyles.text22}>{meta.description}</span>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Subject Line</label>
+              <label className={reviewerEmailTemplatesPageStyles.text23}>Subject Line</label>
               <input
                 id="field-subject"
                 type="text"
                 value={active.subject}
                 onChange={(e) => update("subject", e.target.value)}
-                className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+                className={reviewerEmailTemplatesPageStyles.text24}
                 placeholder="Email subject..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email Body</label>
+              <label className={reviewerEmailTemplatesPageStyles.text23}>Email Body</label>
               <textarea
                 id="field-body"
                 rows={14}
                 value={active.body}
                 onChange={(e) => update("body", e.target.value)}
-                className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-[#101661] resize-y"
+                className={reviewerEmailTemplatesPageStyles.text25}
                 placeholder="Email body text..."
               />
             </div>
@@ -225,15 +222,15 @@ export default function EmailTemplatesPage() {
             {/* Preview */}
             {(active.body.includes("[applicant name]") || active.body.includes("[opportunity name]") ||
               active.subject.includes("[applicant name]") || active.subject.includes("[opportunity name]")) && (
-              <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
-                <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Preview (example values)</p>
-                <p className="text-xs text-gray-600 mb-1">
-                  <span className="font-medium">Subject:</span>{" "}
+              <div className={reviewerEmailTemplatesPageStyles.className26}>
+                <p className={reviewerEmailTemplatesPageStyles.text27}>Preview (example values)</p>
+                <p className={reviewerEmailTemplatesPageStyles.text28}>
+                  <span className={reviewerEmailTemplatesPageStyles.className29}>Subject:</span>{" "}
                   {active.subject
                     .replace(/\[applicant name\]/gi, "Jane Doe")
                     .replace(/\[opportunity name\]/gi, "Jaisohn Challenge Scholarship")}
                 </p>
-                <pre className="text-xs text-gray-600 whitespace-pre-wrap font-sans">
+                <pre className={reviewerEmailTemplatesPageStyles.text30}>
                   {active.body
                     .replace(/\[applicant name\]/gi, "Jane Doe")
                     .replace(/\[opportunity name\]/gi, "Jaisohn Challenge Scholarship")}

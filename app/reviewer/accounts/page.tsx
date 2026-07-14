@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 
+import { reviewerAccountsPageStyles } from "@/styles/pages/reviewer-accounts";
 interface Reviewer {
   id: string;
   name: string;
@@ -67,72 +68,72 @@ export default function ReviewerAccountsPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-col min-h-screen"><Navbar />
-        <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
+      <div className={reviewerAccountsPageStyles.flex01}><Navbar />
+        <div className={reviewerAccountsPageStyles.flextext02}>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className={reviewerAccountsPageStyles.flex03}>
       <Navbar />
-      <div className="max-w-2xl mx-auto w-full px-6 py-10 flex-1">
-        <div className="mb-6">
-          <Link href="/reviewer" className="text-sm text-gray-500 hover:text-gray-700 mb-1 inline-block">← Back to Reviewer Portal</Link>
-          <h1 className="text-3xl font-bold text-[#101661]">Manage Reviewer Accounts</h1>
-          <p className="text-gray-500 mt-1 text-sm">
+      <div className={reviewerAccountsPageStyles.className04}>
+        <div className={reviewerAccountsPageStyles.className05}>
+          <Link href="/reviewer" className={reviewerAccountsPageStyles.text06}>← Back to Reviewer Portal</Link>
+          <h1 className={reviewerAccountsPageStyles.text07}>Manage Reviewer Accounts</h1>
+          <p className={reviewerAccountsPageStyles.text08}>
             Add an email address to grant reviewer access. If the person logs in with Google using that email, they will automatically have reviewer privileges.
           </p>
         </div>
 
         {/* Add form */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
-          <h2 className="font-semibold text-[#101661] mb-3">Add Reviewer</h2>
-          <form onSubmit={handleAdd} className="flex gap-3">
+        <div className={reviewerAccountsPageStyles.white09}>
+          <h2 className={reviewerAccountsPageStyles.text10}>Add Reviewer</h2>
+          <form onSubmit={handleAdd} className={reviewerAccountsPageStyles.flex11}>
             <input
               type="email"
               required
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
               placeholder="email@example.com"
-              className="flex-1 border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661]"
+              className={reviewerAccountsPageStyles.text12}
             />
             <button
               type="submit"
               disabled={adding}
-              className="bg-[#b51f1f] hover:bg-red-700 disabled:opacity-50 text-white font-semibold px-5 py-2 rounded-md text-sm transition-colors"
+              className={reviewerAccountsPageStyles.text13}
             >
               {adding ? "Adding..." : "Add"}
             </button>
           </form>
-          {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+          {error && <p className={reviewerAccountsPageStyles.text14}>{error}</p>}
         </div>
 
         {/* Reviewer list */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="font-semibold text-[#101661]">Current Reviewers ({reviewers.length})</h2>
+        <div className={reviewerAccountsPageStyles.white15}>
+          <div className={reviewerAccountsPageStyles.className16}>
+            <h2 className={reviewerAccountsPageStyles.text17}>Current Reviewers ({reviewers.length})</h2>
           </div>
           {reviewers.length === 0 ? (
-            <div className="p-10 text-center text-gray-400 text-sm">No reviewer accounts found.</div>
+            <div className={reviewerAccountsPageStyles.text18}>No reviewer accounts found.</div>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className={reviewerAccountsPageStyles.className19}>
               {reviewers.map((r) => (
-                <li key={r.id} className="flex items-center justify-between px-6 py-4">
+                <li key={r.id} className={reviewerAccountsPageStyles.flex20}>
                   <div>
-                    <p className="font-medium text-gray-800 text-sm">{r.email}</p>
+                    <p className={reviewerAccountsPageStyles.text21}>{r.email}</p>
                     {r.name && r.name !== r.email.split("@")[0] && (
-                      <p className="text-xs text-gray-400">{r.name}</p>
+                      <p className={reviewerAccountsPageStyles.text22}>{r.name}</p>
                     )}
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className={reviewerAccountsPageStyles.flex23}>
                     {r.id === currentUserId && (
-                      <span className="text-xs bg-blue-50 text-[#101661] border border-blue-200 px-2 py-0.5 rounded-full">You</span>
+                      <span className={reviewerAccountsPageStyles.text24}>You</span>
                     )}
                     <button
                       onClick={() => handleRemove(r)}
                       disabled={r.id === currentUserId}
-                      className="text-sm border border-red-200 text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                      className={reviewerAccountsPageStyles.text25}
                     >
                       Remove
                     </button>

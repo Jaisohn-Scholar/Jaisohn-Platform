@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
 
+import { portalApplyPageStyles } from "@/styles/pages/portal-apply";
 interface Application {
   id: string;
   opportunity_name: string;
@@ -132,8 +133,8 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
   }
 
   if (!app) return (
-    <div className="flex flex-col min-h-screen"><Navbar />
-      <div className="flex-1 flex items-center justify-center text-gray-400">Loading...</div>
+    <div className={portalApplyPageStyles.flex01}><Navbar />
+      <div className={portalApplyPageStyles.flextext02}>Loading...</div>
     </div>
   );
 
@@ -153,81 +154,81 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className={portalApplyPageStyles.flex03}>
       <Navbar />
-      <div className="max-w-3xl mx-auto w-full px-6 py-10 flex-1">
-        <div className="mb-6">
-          <Link href="/portal" className="text-sm text-[#101661] hover:underline">← Back to My Applications</Link>
-          <div className="flex items-center gap-3 mt-3 flex-wrap">
-            <span className={`text-xs font-medium px-2.5 py-1 rounded-full border ${app.opportunity_type === "scholarship" ? "bg-blue-50 text-[#101661] border-blue-200" : "bg-purple-50 text-purple-800 border-purple-200"}`}>
+      <div className={portalApplyPageStyles.className04}>
+        <div className={portalApplyPageStyles.className05}>
+          <Link href="/portal" className={portalApplyPageStyles.text06}>← Back to My Applications</Link>
+          <div className={portalApplyPageStyles.flex07}>
+            <span className={`${portalApplyPageStyles.typeBadge} ${app.opportunity_type === "scholarship" ? portalApplyPageStyles.scholarshipBadge : portalApplyPageStyles.internshipBadge}`}>
               {app.opportunity_type === "scholarship" ? "🎓 Scholarship" : "💼 Internship"}
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-[#101661] mt-2">{app.opportunity_name}</h1>
+          <h1 className={portalApplyPageStyles.text08}>{app.opportunity_name}</h1>
           {isReadOnly && (
-            <div className="mt-3 bg-blue-50 border border-blue-200 rounded-md px-4 py-2 text-blue-700 text-sm">
+            <div className={portalApplyPageStyles.text09}>
               This application has been submitted and is read-only.
             </div>
           )}
         </div>
 
         {!isReadOnly && (
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-gray-400">
+          <div className={portalApplyPageStyles.flex10}>
+            <span className={portalApplyPageStyles.text11}>
               {saving ? "Saving..." : saved ? "✓ Saved" : "Changes are autosaved"}
             </span>
-            <div className="flex gap-2">
+            <div className={portalApplyPageStyles.flex12}>
               <button onClick={save} disabled={saving}
-                className="text-sm bg-white border border-gray-300 hover:border-[#101661] text-gray-700 px-4 py-1.5 rounded-md transition-colors">
+                className={portalApplyPageStyles.whitetext13}>
                 Save Draft
               </button>
               <button onClick={() => setSubmitConfirm(true)}
-                className="text-sm bg-[#b51f1f] hover:bg-red-700 text-white px-4 py-1.5 rounded-md transition-colors font-medium">
+                className={portalApplyPageStyles.text14}>
                 Submit Application
               </button>
             </div>
           </div>
         )}
 
-        <div className="space-y-6">
+        <div className={portalApplyPageStyles.className15}>
           {/* Applicant Info — always show name/email, plus optional fields */}
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-            <h2 className="font-semibold text-[#101661] mb-4">Applicant Information</h2>
-            <div className="grid grid-cols-2 gap-4">
+          <div className={portalApplyPageStyles.white16}>
+            <h2 className={portalApplyPageStyles.text17}>Applicant Information</h2>
+            <div className={portalApplyPageStyles.grid18}>
               {rf.includes("name") && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Full Name</label>
-                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.user_name}</p>
+                  <label className={portalApplyPageStyles.text19}>Full Name</label>
+                  <p className={portalApplyPageStyles.text20}>{app.user_name}</p>
                 </div>
               )}
               {rf.includes("email") && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Email Address</label>
-                  <p className="text-sm text-gray-800 bg-gray-50 rounded-md px-3 py-2">{app.user_email}</p>
+                  <label className={portalApplyPageStyles.text19}>Email Address</label>
+                  <p className={portalApplyPageStyles.text20}>{app.user_email}</p>
                 </div>
               )}
               {needsSchool && (
-                <div className="col-span-2 sm:col-span-1">
-                  <label className="block text-xs font-medium text-gray-500 mb-1">School / University</label>
+                <div className={portalApplyPageStyles.className21}>
+                  <label className={portalApplyPageStyles.text19}>School / University</label>
                   <input value={school} onChange={e => { setSchool(e.target.value); if (!isReadOnly) triggerAutoSave(); }}
                     disabled={isReadOnly} placeholder="e.g. University of Pennsylvania"
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661] disabled:bg-gray-50 disabled:text-gray-600" />
+                    className={portalApplyPageStyles.text22} />
                 </div>
               )}
               {needsYear && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Year / Grade Level</label>
+                  <label className={portalApplyPageStyles.text19}>Year / Grade Level</label>
                   <input value={year} onChange={e => { setYear(e.target.value); if (!isReadOnly) triggerAutoSave(); }}
                     disabled={isReadOnly} placeholder="e.g. Junior, 3rd Year"
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661] disabled:bg-gray-50 disabled:text-gray-600" />
+                    className={portalApplyPageStyles.text22} />
                 </div>
               )}
               {needsBirthday && (
                 <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Date of Birth</label>
+                  <label className={portalApplyPageStyles.text19}>Date of Birth</label>
                   <input type="date" value={birthday} onChange={e => { setBirthday(e.target.value); if (!isReadOnly) triggerAutoSave(); }}
                     disabled={isReadOnly}
-                    className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661] disabled:bg-gray-50 disabled:text-gray-600" />
+                    className={portalApplyPageStyles.text22} />
                 </div>
               )}
             </div>
@@ -235,38 +236,38 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
 
           {/* Essays */}
           {essays.map((essay, i) => essay.enabled && (
-            <div key={i} className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-              <h2 className="font-semibold text-[#101661] mb-1">Essay Question {i + 1}</h2>
-              <p className="text-gray-500 text-sm mb-3">{essay.prompt}</p>
+            <div key={i} className={portalApplyPageStyles.white16}>
+              <h2 className={portalApplyPageStyles.text23}>Essay Question {i + 1}</h2>
+              <p className={portalApplyPageStyles.text24}>{essay.prompt}</p>
               <textarea value={essay.value}
                 onChange={e => { essay.set(e.target.value); if (!isReadOnly) triggerAutoSave(); }}
                 disabled={isReadOnly} rows={6} placeholder="Write your response here..."
-                className="w-full border border-gray-200 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#101661] resize-y disabled:bg-gray-50 disabled:text-gray-600" />
-              <p className="text-xs text-gray-400 mt-1">{essay.value.length} characters</p>
+                className={portalApplyPageStyles.text25} />
+              <p className={portalApplyPageStyles.text26}>{essay.value.length} characters</p>
             </div>
           ))}
 
           {/* Document Uploads */}
           {rd.length > 0 && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-              <h2 className="font-semibold text-[#101661] mb-4">Document Uploads</h2>
-              <div className="space-y-3">
+            <div className={portalApplyPageStyles.white16}>
+              <h2 className={portalApplyPageStyles.text17}>Document Uploads</h2>
+              <div className={portalApplyPageStyles.className27}>
                 {rd.map(docKey => (
-                  <div key={docKey} className="flex items-center justify-between p-3 border border-dashed border-gray-300 rounded-lg">
+                  <div key={docKey} className={portalApplyPageStyles.flex28}>
                     <div>
-                      <p className="font-medium text-sm text-[#101661]">{DOC_LABELS[docKey] || docKey}</p>
+                      <p className={portalApplyPageStyles.text29}>{DOC_LABELS[docKey] || docKey}</p>
                       {docPaths[docKey] ? (
-                        <a href={docPaths[docKey]!} target="_blank" rel="noopener noreferrer" className="text-xs text-[#b51f1f] hover:underline">
+                        <a href={docPaths[docKey]!} target="_blank" rel="noopener noreferrer" className={portalApplyPageStyles.text30}>
                           ✓ Uploaded — View
                         </a>
                       ) : (
-                        <p className="text-xs text-gray-400">PDF, DOC, or DOCX</p>
+                        <p className={portalApplyPageStyles.text11}>PDF, DOC, or DOCX</p>
                       )}
                     </div>
                     {!isReadOnly && (
-                      <label className="cursor-pointer bg-white border border-gray-300 hover:border-[#101661] text-sm text-gray-700 px-3 py-1.5 rounded-md transition-colors">
+                      <label className={portalApplyPageStyles.whitetext31}>
                         {uploading === docKey ? "Uploading..." : docPaths[docKey] ? "Replace" : "Upload"}
-                        <input type="file" accept=".pdf,.doc,.docx" className="hidden" disabled={uploading !== null}
+                        <input type="file" accept=".pdf,.doc,.docx" className={portalApplyPageStyles.className32} disabled={uploading !== null}
                           onChange={e => { if (e.target.files?.[0]) uploadFile(e.target.files[0], docKey); }} />
                       </label>
                     )}
@@ -277,13 +278,13 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
           )}
 
           {!isReadOnly && (
-            <div className="flex justify-end gap-3 pb-8">
+            <div className={portalApplyPageStyles.flex33}>
               <button onClick={save} disabled={saving}
-                className="bg-white border border-gray-300 hover:border-[#101661] text-gray-700 px-6 py-2.5 rounded-md font-medium transition-colors">
+                className={portalApplyPageStyles.whitetext34}>
                 Save Draft
               </button>
               <button onClick={() => setSubmitConfirm(true)}
-                className="bg-[#b51f1f] hover:bg-red-700 text-white px-6 py-2.5 rounded-md font-semibold transition-colors">
+                className={portalApplyPageStyles.text35}>
                 Submit Application
               </button>
             </div>
@@ -292,20 +293,20 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
       </div>
 
       {submitConfirm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-sm text-center">
-            <div className="text-4xl mb-3">📤</div>
-            <h2 className="text-xl font-bold text-[#101661] mb-2">Submit Application?</h2>
-            <p className="text-gray-600 text-sm mb-6">
+        <div className={portalApplyPageStyles.fixedflex36}>
+          <div className={portalApplyPageStyles.whitetext37}>
+            <div className={portalApplyPageStyles.text38}>📤</div>
+            <h2 className={portalApplyPageStyles.text39}>Submit Application?</h2>
+            <p className={portalApplyPageStyles.text40}>
               Once submitted, you won&apos;t be able to edit your application. Make sure everything is complete before submitting.
             </p>
-            <div className="flex gap-3">
+            <div className={portalApplyPageStyles.flex41}>
               <button onClick={() => setSubmitConfirm(false)}
-                className="flex-1 py-2.5 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                className={portalApplyPageStyles.text42}>
                 Go Back
               </button>
               <button onClick={submit}
-                className="flex-1 py-2.5 bg-[#b51f1f] hover:bg-red-700 text-white font-medium rounded-md transition-colors">
+                className={portalApplyPageStyles.text43}>
                 Submit
               </button>
             </div>
