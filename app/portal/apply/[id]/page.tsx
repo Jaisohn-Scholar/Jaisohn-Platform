@@ -265,33 +265,33 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
 
           {/* Document Uploads */}
           {rd.length > 0 && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
-              <h2 className="font-semibold text-[#101661] mb-1">Document Uploads</h2>
-              <p className="text-xs text-gray-500 mb-4">
+            <div className={portalApplyPageStyles.white16}>
+              <h2 className={portalApplyPageStyles.uploadHeading}>Document Uploads</h2>
+              <p className={portalApplyPageStyles.uploadHelp}>
                 Only PDF or Word files (.pdf, .doc, .docx) up to 10 MB are accepted.
               </p>
               {uploadError && (
-                <p role="alert" className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2 mb-4">
+                <p role="alert" className={portalApplyPageStyles.uploadError}>
                   {uploadError}
                 </p>
               )}
-              <div className="space-y-3">
+              <div className={portalApplyPageStyles.className27}>
                 {rd.map(docKey => (
                   <div key={docKey} className={portalApplyPageStyles.flex28}>
                     <div>
                       <p className={portalApplyPageStyles.text29}>{DOC_LABELS[docKey] || docKey}</p>
                       {docPaths[docKey] ? (
-                        <a href={`/api/applications/${id}/docs/${docKey}`} className="text-xs text-[#b51f1f] hover:underline">
+                        <a href={`/api/applications/${id}/docs/${docKey}`} className={portalApplyPageStyles.uploadFileLink}>
                           ✓ Uploaded — Download
                         </a>
                       ) : (
-                        <p className="text-xs text-gray-400">PDF or Word only</p>
+                        <p className={portalApplyPageStyles.uploadFileHint}>PDF or Word only</p>
                       )}
                     </div>
                     {!isReadOnly && (
                       <label className={portalApplyPageStyles.whitetext31}>
                         {uploading === docKey ? "Uploading..." : docPaths[docKey] ? "Replace" : "Upload"}
-                        <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="hidden" disabled={uploading !== null}
+                        <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className={portalApplyPageStyles.className32} disabled={uploading !== null}
                           onChange={e => { if (e.target.files?.[0]) uploadFile(e.target.files[0], docKey); }} />
                       </label>
                     )}
