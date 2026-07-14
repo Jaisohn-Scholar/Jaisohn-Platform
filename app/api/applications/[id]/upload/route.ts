@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sql, ensureDb } from "@/lib/db";
+import { MAX_DOCUMENT_SIZE, validateDocumentFile } from "@/lib/document-file";
 
 const DOC_COLUMNS: Record<string, string> = {
   resume: "resume_path",
@@ -25,17 +26,28 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   }
 
   const formData = await req.formData();
-  const file = formData.get("file") as File;
-  const fileType = formData.get("type") as string;
-  if (!file || !fileType) return NextResponse.json({ error: "Missing file or type" }, { status: 400 });
+  const file = formData.get("file");
+  const fileType = formData.get("type");
+  if (!(file instanceof File) || typeof fileType !== "string") {
+    return NextResponse.json({ error: "Missing file or type" }, { status: 400 });
+  }
 
   const col = DOC_COLUMNS[fileType];
   if (!col) return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
+  if (file.size === 0 || file.size > MAX_DOCUMENT_SIZE) {
+    return NextResponse.json({ error: "File must be between 1 byte and 10 MB" }, { status: 400 });
+  }
 
   const buffer = Buffer.from(await file.arrayBuffer());
+  const document = validateDocumentFile(file, buffer);
+  if (!document) {
+    return NextResponse.json(
+      { error: "Only valid PDF, DOC, and DOCX files are accepted" },
+      { status: 400 }
+    );
+  }
   const base64 = buffer.toString("base64");
-  const mimeType = file.type || "application/pdf";
-  const dataUrl = `data:${mimeType};base64,${base64}`;
+  const dataUrl = `data:${document.mimeType};base64,${base64}`;
 
   // Safe because col comes from our own allowlist above
   if (col === "resume_path") await sql`UPDATE applications SET resume_path = ${dataUrl}, updated_at = NOW() WHERE id = ${id}`;
@@ -45,5 +57,8 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   else if (col === "financial_need_path") await sql`UPDATE applications SET financial_need_path = ${dataUrl}, updated_at = NOW() WHERE id = ${id}`;
   else if (col === "supporting_docs_path") await sql`UPDATE applications SET supporting_docs_path = ${dataUrl}, updated_at = NOW() WHERE id = ${id}`;
 
-  return NextResponse.json({ path: dataUrl, type: fileType });
+  return NextResponse.json({
+    path: `/api/applications/${id}/docs/${fileType}`,
+    type: fileType,
+  });
 }

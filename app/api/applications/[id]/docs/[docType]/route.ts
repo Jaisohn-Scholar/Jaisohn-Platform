@@ -55,14 +55,23 @@ export async function GET(
   if (!match) return NextResponse.json({ error: "Invalid file data" }, { status: 500 });
 
   const [, mimeType, base64Data] = match;
+  const allowedTypes: Record<string, string> = {
+    "application/pdf": "pdf",
+    "application/msword": "doc",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+  };
+  const ext = allowedTypes[mimeType.toLowerCase()];
+  if (!ext) return NextResponse.json({ error: "Unsupported file type" }, { status: 415 });
+
   const buffer = Buffer.from(base64Data, "base64");
-  const ext = mimeType.split("/")[1] || "bin";
 
   return new NextResponse(buffer, {
     headers: {
       "Content-Type": mimeType,
-      "Content-Disposition": `inline; filename="${docType}.${ext}"`,
+      "Content-Disposition": `attachment; filename="${docType}.${ext}"`,
       "Content-Length": String(buffer.length),
+      "X-Content-Type-Options": "nosniff",
+      "Cache-Control": "private, no-store",
     },
   });
 }

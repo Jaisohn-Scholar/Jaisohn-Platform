@@ -66,6 +66,7 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
   const [saved, setSaved] = useState(false);
   const [submitConfirm, setSubmitConfirm] = useState(false);
   const [uploading, setUploading] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState("");
   const autoSaveTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   useEffect(() => {
@@ -122,13 +123,28 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
   }
 
   async function uploadFile(file: File, type: string) {
+    setUploadError("");
+    const extension = file.name.toLowerCase().match(/\.([a-z0-9]+)$/)?.[1];
+    if (!extension || !["pdf", "doc", "docx"].includes(extension)) {
+      setUploadError("Only PDF or Word files (.pdf, .doc, .docx) are accepted.");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setUploadError("The selected file is larger than 10 MB.");
+      return;
+    }
+
     setUploading(type);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("type", type);
     const res = await fetch(`/api/applications/${id}/upload`, { method: "POST", body: formData });
     const data = await res.json();
-    setDocPaths(prev => ({ ...prev, [type]: data.path }));
+    if (res.ok) {
+      setDocPaths(prev => ({ ...prev, [type]: data.path }));
+    } else {
+      setUploadError(data.error || "Upload failed. Please try again.");
+    }
     setUploading(null);
   }
 
@@ -249,25 +265,33 @@ export default function ApplyPage({ params }: { params: Promise<{ id: string }> 
 
           {/* Document Uploads */}
           {rd.length > 0 && (
-            <div className={portalApplyPageStyles.white16}>
-              <h2 className={portalApplyPageStyles.text17}>Document Uploads</h2>
-              <div className={portalApplyPageStyles.className27}>
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+              <h2 className="font-semibold text-[#101661] mb-1">Document Uploads</h2>
+              <p className="text-xs text-gray-500 mb-4">
+                Only PDF or Word files (.pdf, .doc, .docx) up to 10 MB are accepted.
+              </p>
+              {uploadError && (
+                <p role="alert" className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md px-3 py-2 mb-4">
+                  {uploadError}
+                </p>
+              )}
+              <div className="space-y-3">
                 {rd.map(docKey => (
                   <div key={docKey} className={portalApplyPageStyles.flex28}>
                     <div>
                       <p className={portalApplyPageStyles.text29}>{DOC_LABELS[docKey] || docKey}</p>
                       {docPaths[docKey] ? (
-                        <a href={docPaths[docKey]!} target="_blank" rel="noopener noreferrer" className={portalApplyPageStyles.text30}>
-                          ✓ Uploaded — View
+                        <a href={`/api/applications/${id}/docs/${docKey}`} className="text-xs text-[#b51f1f] hover:underline">
+                          ✓ Uploaded — Download
                         </a>
                       ) : (
-                        <p className={portalApplyPageStyles.text11}>PDF, DOC, or DOCX</p>
+                        <p className="text-xs text-gray-400">PDF or Word only</p>
                       )}
                     </div>
                     {!isReadOnly && (
                       <label className={portalApplyPageStyles.whitetext31}>
                         {uploading === docKey ? "Uploading..." : docPaths[docKey] ? "Replace" : "Upload"}
-                        <input type="file" accept=".pdf,.doc,.docx" className={portalApplyPageStyles.className32} disabled={uploading !== null}
+                        <input type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="hidden" disabled={uploading !== null}
                           onChange={e => { if (e.target.files?.[0]) uploadFile(e.target.files[0], docKey); }} />
                       </label>
                     )}
