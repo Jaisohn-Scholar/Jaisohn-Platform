@@ -12,6 +12,9 @@ export async function initDb() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+  // Disable the legacy reviewer credential that was previously seeded in source.
+  // The account can still authenticate through Google OAuth.
+  await sql`UPDATE users SET password = NULL WHERE id = 'reviewer-seed'`;
   await sql`
     CREATE TABLE IF NOT EXISTS accounts (
       id TEXT PRIMARY KEY,
@@ -204,13 +207,6 @@ export async function initDb() {
     ('opp-hf', 'scholarship', 'Honam Friendship Scholarship', 'Awarded to a Korean-American student in good academic standing that demonstrates leadership.', '$1,500', 1, 'Undergraduate & Graduate', 'June 30, 2026')
     ON CONFLICT (id) DO NOTHING`;
 
-  // Seed reviewer
-  const reviewer = await sql`SELECT id FROM users WHERE email = 'koseli.thakali@jaisohn.org'`;
-  if (reviewer.rows.length === 0) {
-    const bcrypt = await import("bcryptjs");
-    const hash = bcrypt.hashSync("JaisohnCenter", 10);
-    await sql`INSERT INTO users (id, email, name, password, role) VALUES ('reviewer-seed', 'koseli.thakali@jaisohn.org', 'Koseli Thakali', ${hash}, 'reviewer') ON CONFLICT DO NOTHING`;
-  }
 }
 
 let initialized = false;
